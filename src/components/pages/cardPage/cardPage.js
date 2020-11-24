@@ -1,0 +1,182 @@
+import React, { Fragment, useState, useEffect } from "react";
+import axios from "axios";
+import Navbar from "../../molecules/navbar/navbar";
+import PostCard from "../../molecules/card/card";
+import CardForm from "../../organisms/cardForm/cardForm";
+import Grid from '@material-ui/core/Grid';
+import Rating from "../../atoms/rating/rating";
+import Typography from '@material-ui/core/Typography';
+
+const CardPage = (props) => {
+
+    const postCardId = props.match.params.id;
+    const [editing, setEditing] = useState(false);
+    const [bench, setBench] = useState([]);
+    const [readOnlyRating, setReadOnlyRating] = useState(false);
+    const [readOnlyQuiet, setReadOnlyQuiet] = useState(false);
+
+    function randomImg(width, height, key) {
+        var source = 'https://source.unsplash.com/random/' + width + 'x' + height + '/?bench,park' + key;
+        return source;
+    }
+
+    function calRating(ratingArray) {
+        if (ratingArray === undefined) {
+            return 0;
+        } else {
+            console.log(bench.ratings)
+            var total = 0;
+            var length = 0;
+            console.log("rating,", ratingArray)
+            length = ratingArray.length;
+            ratingArray.map(r => total += r.rating);
+
+            let result = total / length;
+
+            return Math.round(result * 2) / 2;
+        }
+
+    }
+
+    function calQuiet(quietArray) {
+        if (quietArray === undefined) {
+            return 0;
+        } else {
+            console.log(bench.quiet)
+            var total = 0;
+            var length = 0;
+            console.log("rating,", quietArray)
+            length = quietArray.length;
+            quietArray.map(r => total += r.quiet);
+            let result = total / length;
+
+            return Math.round(result * 2) / 2;
+        }
+    }
+
+    function getOneBench(id) {
+        if (id !== undefined) {
+            axios.get(`http://localhost:8080/benches/${id}`)
+                .then((res) => {
+                    setBench(res.data);
+                })
+        }
+    }
+
+    function deleteBench(id) {
+        axios.delete(`http://localhost:8080/benches/${id}`)
+            .then(() => {
+                props.history.push(`/`);
+            })
+    }
+
+    function editBench() {
+        setEditing(true);
+    }
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        getOneBench(postCardId);
+    }, []);
+
+    const [valueRating, setValueRating] = useState({});
+    const [valueQuiet, setValueQuiet] = useState({});
+
+    function postRating(dtoObject) {
+        axios.post(`http://localhost:8080/ratings`, dtoObject)
+            .then(res => {
+                putBenchByRating(res.data);
+            })
+    }
+
+    function postQuiet(dtoObject) {
+        axios.post(`http://localhost:8080/quiets`, dtoObject)
+            .then(res => {
+                putBenchByQuiet(res.data);
+            })
+    }
+
+    function putBenchByRating(dtoRating) {
+        axios.put(`http://localhost:8080/benches/${bench.id}/rating/${dtoRating.id}`, bench)
+            .then(res => {
+                setBench(res.data);
+            })
+    }
+
+    function putBenchByQuiet(quietDTO) {
+        axios.put(`http://localhost:8080/benches/${bench.id}/quiet/${quietDTO.id}`, bench)
+            .then(res => {
+                setBench(res.data);
+            })
+    }
+
+    return (
+        <Fragment>
+            <Navbar />
+            {editing || postCardId === 'new' ?
+                <Grid container spacing={3} justify="center" alignItems="center">
+                    <Grid item xs={4}>
+                        <CardForm bench={postCardId === 'new' ? { ...bench, id: 'new' } : bench} setBench={postCardId === 'new' ? () => { } : setBench} />
+                    </Grid>
+                </Grid>
+
+                :
+                <Grid container spacing={3} justify="center" alignItems="center">
+                    <Grid item md={4}>
+                        <PostCard
+                            id={postCardId}
+                            image={randomImg(500, 500, postCardId)}
+                            deleteButton={true}
+                            editButton={true}
+                            title={bench.title}
+                            valueQuietness={calQuiet(bench.quiets)}
+                            valueRating={calRating(bench.ratings)}
+                            amountBenches={bench.amountBenches}
+                            amountFirePlaces={bench.amountFirePlaces}
+                            amountTrashCans={bench.amountTrashCans}
+                            distanceToNextShop={bench.distanceToNextShop}
+                            directions={bench.directions}
+                            readOnly={true}
+                            deleteFunction={() => deleteBench(postCardId)}
+                            editFunction={() => editBench(postCardId)}
+
+                        />
+                    </Grid>
+                    <Grid item md={4}>
+                        <Typography variant="body2" color="textSecondary" component="h6">
+                            Rate
+                        </Typography>
+                        <Rating name="rating-feedback"
+                            precicion={0.5}
+                            value={valueRating}
+                            readOnly={readOnlyRating}
+                            onChange={(event) => {
+                                setValueRating(event.target.value);
+                                postRating({ rating: event.target.value });
+                                setReadOnlyRating(true);
+                                event.preventDefault();
+                            }}
+                        />
+
+                        <Typography variant="body2" color="textSecondary" component="h6">
+                            Quiet
+                        </Typography>
+                        <Rating name="quiet-feedback"
+                            precicion={0.5}
+                            value={valueQuiet}
+                            readOnly={readOnlyQuiet}
+                            onChange={(event) => {
+                              setValueQuiet(event.target.value);
+                              postQuiet({ quiet: event.target.value });
+                              setReadOnlyQuiet(true);
+                              event.preventDefault();
+                            }}
+                        />
+                    </Grid>
+                </Grid>
+            }
+        </Fragment>
+    );
+}
+
+export default CardPage;
