@@ -13,6 +13,8 @@ import { withRouter } from "react-router-dom";
 import clsx from 'clsx';
 import Logo from './../../../logo.png'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import PersonIcon from '@material-ui/icons/Person';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -76,15 +78,12 @@ const Navbar = props => {
           {/* <Button color="inherit"  >Login</Button> */}
 
           <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            //   onClick={console.log(1)}
             color="inherit"
             onClick={() => { goToLogin() }}
             edge="end"
+            title={"Get signed in"}
           >
-            <ExitToAppIcon />
+            <PersonIcon />
           </IconButton>
 
         </Toolbar>

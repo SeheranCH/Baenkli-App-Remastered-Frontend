@@ -1,9 +1,8 @@
-import React  from "react";
 import * as Yup from "yup";
 
 const regexName = /^[a-zA-Z äöüéèàÜÖÄÉÈÀ,+-]+$/;
 
-export const validationSchema = Yup.object().shape({
+export const CardValidationSchema = Yup.object().shape({
   title: Yup.string()
     .trim()
     .matches(regexName, "Please enter only names")
