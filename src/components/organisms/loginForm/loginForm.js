@@ -10,7 +10,7 @@ import SessionHandlerContext from "../../other/context/SessionHandlerContext";
 
  // TO DO: fix height between form elements in case of showing error messages
 
-const Login = props => {
+const LoginForm = props => {
 
   const GreenSwitch = withStyles({
     switchBase: {
@@ -166,4 +166,4 @@ const Login = props => {
   );
 };
 
-export default Login;
+export default LoginForm;

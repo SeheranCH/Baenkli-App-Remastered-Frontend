@@ -11,7 +11,7 @@ import FireplaceIcon from '@material-ui/icons/Fireplace';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import DirectionsIcon from '@material-ui/icons/Directions';
-import StarRating from '../../atoms/rating/rating';
+import StarRating from '../../atoms/rating/Rating';
 import SpaIcon from '@material-ui/icons/Spa';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 

@@ -1,10 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar";
-import PostCard from "../../molecules/card/card";
-import CardForm from "../../organisms/cardForm/cardForm";
+import Navbar from "../../molecules/navbar/Navbar";
+import PostCard from "../../molecules/card/Card";
+import CardForm from "../../organisms/cardForm/CardForm";
 import Grid from '@material-ui/core/Grid';
-import Rating from "../../atoms/rating/rating";
+import Rating from "../../atoms/rating/Rating";
 import Typography from '@material-ui/core/Typography';
 
 const CardPage = (props) => {

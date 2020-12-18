@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import HomePage from "../../pages/homePage/homePage";
-import LoginPage from "../../pages/loginPage/loginPage";
-import CardPage from "../../pages/cardPage/cardPage";
-import MapsPage from "../../pages/mapsPage/mapsPage";
+import HomePage from "../../pages/homePage/HomePage";
+import LoginPage from "../../pages/loginPage/LoginPage";
+import CardPage from "../../pages/cardPage/CardPage";
+import MapsPage from "../../pages/mapsPage/MapsPage";
 
 const Router = () => {
   return (

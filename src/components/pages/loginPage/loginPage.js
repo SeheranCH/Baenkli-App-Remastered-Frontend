@@ -1,16 +1,16 @@
 import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar"
-import PostCard from "../../molecules/card/card"
+import Navbar from "../../molecules/navbar/Navbar"
+import PostCard from "../../molecules/card/Card"
 import Grid from '@material-ui/core/Grid';
-import Login from '../../organisms/loginForm/loginForm'
+import LoginForm from '../../organisms/loginForm/LoginForm'
 
 const LoginPage = () => {
 
   return (
     <Fragment>
       <Navbar />
-      <Login />
+      <LoginForm />
     </Fragment>
   );
 };

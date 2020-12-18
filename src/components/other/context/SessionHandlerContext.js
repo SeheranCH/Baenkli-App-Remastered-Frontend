@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useHistory } from 'react-router-dom'
-import axios from 'axios';
 import UserService from "../../../service/UserService";
 
 
@@ -34,7 +33,7 @@ export const SessionHandlerContextProvider = (props) => {
     const login = (data) => {
          UserService.login(data)
               .then(res => {
-                console.log('Show user info ', res.data);
+                console.log('Show user info ', res);
                 localStorage.setItem("token", res.headers["authorization"])
                 setActiveUser(res.data)
                 history.push('/');

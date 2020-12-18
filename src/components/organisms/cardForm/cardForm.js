@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar"
+import Navbar from "../../molecules/navbar/Navbar"
 import Grid from '@material-ui/core/Grid';
 import { Formik } from "formik";
 import * as Yup from "yup";
