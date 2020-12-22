@@ -4,6 +4,7 @@ import HomePage from "../../pages/homePage/HomePage";
 import LoginPage from "../../pages/loginPage/LoginPage";
 import CardPage from "../../pages/cardPage/CardPage";
 import MapsPage from "../../pages/mapsPage/MapsPage";
+import RegisterPage from "../../pages/registerPage/RegisterPage";
 
 const Router = () => {
   return (
@@ -12,6 +13,7 @@ const Router = () => {
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/bench/:id" component={CardPage} />
       <Route exact path="/maps" component={MapsPage} />
+      <Route exact path="/signup" component={RegisterPage} />
     </Switch>
   );
 };
