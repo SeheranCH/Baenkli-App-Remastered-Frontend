@@ -13,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { useHistory } from 'react-router-dom'
+import BenchService from "../../../service/BenchService";
 
 
 const CardForm = ({ bench, setBench, modeCreate }) => {
@@ -121,6 +122,29 @@ const CardForm = ({ bench, setBench, modeCreate }) => {
                         setSubmitting(true);
                         const dto = { ...bench, ...values };
                         console.log('DTO ', dto)
+                        if (modeCreate) {
+                            BenchService.create(dto)
+                                .then(res => {
+                                    history.push(`/`);
+                                })
+                                .catch(err => {
+                                    console.error('Error in CardForm ', err);
+                                })
+                                .finally(() => {
+                                    setSubmitting(false);
+                                })
+                        } else {
+                            BenchService.update(dto.id, dto)
+                                .then(res => {
+                                    history.push(`/`);
+                                })
+                                .catch(err => {
+                                    console.error('Error in CardForm ', err);
+                                })
+                                .finally(() => {
+                                    setSubmitting(false);
+                                })
+                        }
                         {/* if (bench.id !== 'new') {
                             axios.put(`http://localhost:8080/benches/${bench.id}`, dto)
                                 .then(response => {

@@ -6,8 +6,6 @@ import Grid from "@material-ui/core/Grid"
 const NewBenchPage = () => {
 
     return (
-
-
         <Fragment>
             <Navbar />
             <Grid container spacing={3} justify="center" alignItems="center">

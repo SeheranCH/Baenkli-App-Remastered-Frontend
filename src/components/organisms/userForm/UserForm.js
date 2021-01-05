@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import { UserValidationSchema } from "../../other/validation/UserValidationSchema";
 import UserService from "../../../service/UserService";
 import SessionHandlerContext from "../../other/context/SessionHandlerContext";
-
+import {useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -59,6 +59,8 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
 
     const { setActiveUser } = useContext(SessionHandlerContext);
 
+    const history = useHistory();
+
     const [showPassword, setShowPassword] = useState(false);
     const [typePassword, setTypePassword] = useState("password");
     const [textShowPassword, setTextShowPassword] = useState("Show password")
@@ -86,12 +88,11 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                         delete dto.emailRepeat;
                         delete dto.passwordRepeat;
                         console.log('DTO ', dto)
-                        {/* if (modeRegister) {
-                            dto = { ...dto, username: values.email }
+                        if (modeRegister) {
                             console.log('ZEIG ', dto)
                             UserService.create(dto)
                                 .then(() => {
-                                    goToLogin();
+                                    history.push('/login')
                                 })
                                 .catch(err => {
                                     console.error('Error in UserForm: ', err);
@@ -105,7 +106,7 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                     console.error('Error in UserForm: ', err);
                                 })
 
-                        } */}
+                        }
                     }}
                 >
                     {({ handleSubmit, errors, touched, handleChange, initialValues, isSubmitting, values }) => {
