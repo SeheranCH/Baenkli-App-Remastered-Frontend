@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { makeStyles, TextField, Typography, Button, Switch, Paper } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import { makeStyles, TextField, Typography, Button, Switch, Paper, Container } from "@material-ui/core";
 import { Formik } from "formik";
 import { UserValidationSchema } from "../../other/validation/UserValidationSchema";
 import UserService from "../../../service/UserService";
@@ -7,16 +8,18 @@ import SessionHandlerContext from "../../other/context/SessionHandlerContext";
 
 
 const useStyles = makeStyles((theme) => ({
+    root: {
+        marginTop: "10%"
+    },
     paper: {
-        margin: "50px",
-        marginTop: "150px",
-        padding: "30px"
+        flexGrow: 1,
+        paddingTop: "50px",
+        paddingBottom: "50px",
+        background: "#e6f3d8",
+        color: "black",
     },
     title: {
-        marginTop: "20px",
-        textAlign: "center",
-        color: "#87C4F4",
-
+        textAlign: "center"
     },
     inputs: {
         textAlign: "center",
@@ -40,7 +43,16 @@ const useStyles = makeStyles((theme) => ({
     footer: {
         textAlign: "center",
         margin: "20px"
-    }
+    },
+    submitButton: {
+        backgroundColor: "#355A20",
+        color: "white",
+        '&:hover': {
+          backgroundColor: "#47792A",
+          color: '#FFF'
+        }
+  
+      },
 }));
 
 const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
@@ -62,167 +74,174 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
         // eslint-disable-next-line
     }, [showPassword])
 
-
-
-
     return (
-        <Paper className={classes.paper}>
-            <Formik
-                initialValues={initialObject}
-                enableReinitialize
-                validationSchema={UserValidationSchema}
-                onSubmit={(values) => {
-                    var dto = { ...initialObject, ...values };
-                    delete dto.emailRepeat;
-                    delete dto.passwordRepeat;
-                    console.log('DTO ', dto)
-                    if (modeRegister) {
-                        dto = { ...dto, username: values.email }
-                        console.log('ZEIG ', dto)
-                        UserService.create(dto)
-                            .then(() => {
-                                goToLogin();
-                            })
-                            .catch(err => {
-                                console.error('Error in UserForm: ', err);
-                            })
-                    } else {
-                        UserService.update(dto.id, dto)
-                            .then((res) => {
-                                setActiveUser(res.data);
-                            })
-                            .catch(err => {
-                                console.error('Error in UserForm: ', err);
-                            })
+        <Container className={classes.root}>
+            <Paper className={classes.paper}>
+                <Formik
+                    initialValues={initialObject}
+                    enableReinitialize
+                    validationSchema={UserValidationSchema}
+                    onSubmit={(values) => {
+                        var dto = { ...initialObject, ...values };
+                        delete dto.emailRepeat;
+                        delete dto.passwordRepeat;
+                        console.log('DTO ', dto)
+                        {/* if (modeRegister) {
+                            dto = { ...dto, username: values.email }
+                            console.log('ZEIG ', dto)
+                            UserService.create(dto)
+                                .then(() => {
+                                    goToLogin();
+                                })
+                                .catch(err => {
+                                    console.error('Error in UserForm: ', err);
+                                })
+                        } else {
+                            UserService.update(dto.id, dto)
+                                .then((res) => {
+                                    setActiveUser(res.data);
+                                })
+                                .catch(err => {
+                                    console.error('Error in UserForm: ', err);
+                                })
 
-                    }
-                }}
-            >
-                {({ handleSubmit, errors, touched, handleChange, initialValues, dirty, values }) => {
-                    return (
-                        <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
-                            <div className={classes.inputs}>
-                                {console.log('ERRORS ', initialValues)}
-                                <TextField
-                                    id="email"
-                                    name="email"
-                                    label="Email *"
-                                    variant="outlined"
-                                    type="text"
-                                    error={errors.email && touched.email}
-                                    helperText={touched.email ? errors.email : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.email}
-                                />
-                                {modeRegister || initialValues.email !== values.email ?
+                        } */}
+                    }}
+                >
+                    {({ handleSubmit, errors, touched, handleChange, initialValues, isSubmitting, values }) => {
+                        return (
+                            <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
+                                <p className={classes.title}>
+                                    <b>
+                                        Register
+                                    </b>
+                                </p>
+                                <div className={classes.inputs}>
                                     <TextField
-                                        id="emailRepeat"
-                                        name="emailRepeat"
-                                        label="Confirm email *"
+                                        id="email"
+                                        name="email"
+                                        label="Email *"
                                         variant="outlined"
                                         type="text"
-                                        error={errors.emailRepeat && touched.emailRepeat}
-                                        helperText={touched.emailRepeat ? errors.emailRepeat : null}
+                                        error={errors.email && touched.email}
+                                        helperText={touched.email ? errors.email : null}
                                         className={classes.input}
-                                        defaultValue={initialValues.emailRepeat}
+                                        defaultValue={initialValues.email}
                                     />
-                                    : null}
-                            </div>
-                            <div className={classes.inputs}>
-                                <TextField
-                                    id="password"
-                                    name="password"
-                                    label="Password *"
-                                    variant="outlined"
-                                    type={typePassword}
-                                    error={errors.password && touched.password}
-                                    helperText={touched.password ? errors.password : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.password}
-                                />
-                                {modeRegister || initialValues.password !== values.password ?
+                                    {modeRegister || initialValues.email !== values.email ?
+                                        <TextField
+                                            id="emailRepeat"
+                                            name="emailRepeat"
+                                            label="Confirm email *"
+                                            variant="outlined"
+                                            type="text"
+                                            error={errors.emailRepeat && touched.emailRepeat}
+                                            helperText={touched.emailRepeat ? errors.emailRepeat : null}
+                                            className={classes.input}
+                                            defaultValue={initialValues.emailRepeat}
+                                        />
+                                        : null}
+                                </div>
+                                <div className={classes.inputs}>
                                     <TextField
-                                        id="passwordRepeat"
-                                        name="passwordRepeat"
-                                        label="Confirm password *"
+                                        id="password"
+                                        name="password"
+                                        label="Password *"
                                         variant="outlined"
                                         type={typePassword}
-                                        error={errors.passwordRepeat && touched.passwordRepeat}
-                                        helperText={touched.passwordRepeat ? errors.passwordRepeat : null}
+                                        error={errors.password && touched.password}
+                                        helperText={touched.password ? errors.password : null}
                                         className={classes.input}
+                                        defaultValue={initialValues.password}
                                     />
-                                    : null}
-                            </div>
-                            <div className={classes.inputs}>
-                                <TextField
-                                    id="username"
-                                    name="username"
-                                    label="Username *"
-                                    variant="outlined"
-                                    type="text"
-                                    error={errors.username && touched.username}
-                                    helperText={touched.username ? errors.username : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.username != null ? initialValues.username : null}
-                                />
-                            </div>
-                            <div className={classes.inputs}>
-                                <TextField
-                                    id="firstName"
-                                    name="firstName"
-                                    label="First name *"
-                                    variant="outlined"
-                                    type="text"
-                                    error={errors.firstName && touched.firstName}
-                                    helperText={touched.firstName ? errors.firstName : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.firstName != null ? initialValues.firstName : null}
-                                />
-                                <TextField
-                                    id="lastName"
-                                    name="lastName"
-                                    label="Last name *"
-                                    variant="outlined"
-                                    type="text"
-                                    error={errors.lastName && touched.lastName}
-                                    helperText={touched.lastName ? errors.lastName : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.lastName != null ? initialValues.lastName : null}
-                                />
-                            </div>
+                                    {modeRegister || initialValues.password !== values.password ?
+                                        <TextField
+                                            id="passwordRepeat"
+                                            name="passwordRepeat"
+                                            label="Confirm password *"
+                                            variant="outlined"
+                                            type={typePassword}
+                                            error={errors.passwordRepeat && touched.passwordRepeat}
+                                            helperText={touched.passwordRepeat ? errors.passwordRepeat : null}
+                                            className={classes.input}
+                                        />
+                                        : null}
+                                </div>
+                                <div className={classes.inputs}>
+                                    <TextField
+                                        id="username"
+                                        name="username"
+                                        label="Username *"
+                                        variant="outlined"
+                                        type="text"
+                                        error={errors.username && touched.username}
+                                        helperText={touched.username ? errors.username : null}
+                                        className={classes.input}
+                                        defaultValue={initialValues.username != null ? initialValues.username : null}
+                                        style={{ width: "400px" }}
+                                    />
+                                </div>
+                                <div className={classes.inputs}>
+                                    <TextField
+                                        id="firstName"
+                                        name="firstName"
+                                        label="First name *"
+                                        variant="outlined"
+                                        type="text"
+                                        error={errors.firstName && touched.firstName}
+                                        helperText={touched.firstName ? errors.firstName : null}
+                                        className={classes.input}
+                                        defaultValue={initialValues.firstName != null ? initialValues.firstName : null}
+                                    />
+                                    <TextField
+                                        id="lastName"
+                                        name="lastName"
+                                        label="Last name *"
+                                        variant="outlined"
+                                        type="text"
+                                        error={errors.lastName && touched.lastName}
+                                        helperText={touched.lastName ? errors.lastName : null}
+                                        className={classes.input}
+                                        defaultValue={initialValues.lastName != null ? initialValues.lastName : null}
+                                    />
+                                </div>
 
-                            <div className={classes.footer}>
-                                <Typography />
-                                <Switch
-                                    className={classes.switch}
-                                    checked={showPassword}
-                                    onChange={() => {
-                                        setShowPassword(!showPassword);
-                                    }}
-                                    color="primary"
-                                />
-                                {textShowPassword}
-                                <Typography />
-                                <Button
-                                    type="submit"
-                                >
-                                    {modeRegister ?
-                                        "Sign up"
-                                        : "Update"}
-                                </Button>
-                                <Typography className={classes.helperText}>
-                                    {modeRegister &&
-                                        <div>
-                                            Have you an account yet? Sign in <a className={classes.link} href={"/login"}>here</a>
-                                        </div>
-                                    }
-                                </Typography>
-                            </div>
-                        </form>
-                    )
-                }}
-            </Formik>
-        </Paper>
+                                <div className={classes.footer}>
+                                    <Typography />
+                                    <Switch
+                                        className={classes.switch}
+                                        checked={showPassword}
+                                        onChange={() => {
+                                            setShowPassword(!showPassword);
+                                        }}
+                                        color="primary"
+                                    />
+                                    {textShowPassword}
+                                    <Typography />
+                                    <Button
+                                        type="submit"
+                                        disabled={isSubmitting}
+                                        className={classes.submitButton}
+                                    >
+                                        {modeRegister ?
+                                            "Sign up"
+                                            : "Update"}
+                                    </Button>
+                                    <Typography className={classes.helperText}>
+                                        {modeRegister &&
+                                            <div className={classes.footer}>
+                                                <p> Have you created an account yet?</p>
+                                                <Link className={classes.link} to="/login">Sign in now</Link>
+                                            </div>
+                                        }
+                                    </Typography>
+                                </div>
+                            </form>
+                        )
+                    }}
+                </Formik>
+            </Paper>
+        </Container>
     );
 };
 export default UserForm;

@@ -51,7 +51,7 @@ function BottomNavbar(props) {
     const classes = useStyles();
 
     const goToAddBench = () => {
-        props.history.push(`/bench/new`);
+        props.history.push(`/create`);
     }
 
     return (

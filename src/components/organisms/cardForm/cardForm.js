@@ -12,8 +12,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { useHistory } from 'react-router-dom'
 
-const CardForm = ({ bench, setBench }) => {
+
+const CardForm = ({ bench, setBench, modeCreate }) => {
 
     const GreenSwitch = withStyles({
         switchBase: {
@@ -52,8 +54,10 @@ const CardForm = ({ bench, setBench }) => {
 
     const classes = useStyles();
 
-    const [hasMeadow, setHasMeadow] = useState(bench === undefined ? false : bench.hasMeadow);
-    const [locationOnWater, setLocationOnWater] = useState(bench === undefined ? false : bench.locationOnWater);
+    const history = useHistory();
+
+    const [hasMeadow, setHasMeadow] = useState(modeCreate ? false : bench.hasMeadow);
+    const [locationOnWater, setLocationOnWater] = useState(modeCreate ? false : bench.locationOnWater);
     const [submitting, setSubmitting] = useState(false);
 
     const handleChangeMeadow = () => {
@@ -81,13 +85,16 @@ const CardForm = ({ bench, setBench }) => {
             .max(250, validationMax),
         description: Yup.string()
             .trim()
-            .max(250, validationMax),
+            .max(250, validationMax)
+            .nullable(true),
         latitude: Yup.number()
             .min(-90, validationMinLatitude)
-            .max(90, validationMaxLatitude),
+            .max(90, validationMaxLatitude)
+            .nullable(true),
         longitude: Yup.number()
             .min(-180, validationMinLongitude)
-            .max(180, validationMaxLongitude),
+            .max(180, validationMaxLongitude)
+            .nullable(true),
         amountBenches: Yup.number()
             .required("Amount of benches required")
             .min(0, validationMinNumber),
@@ -98,7 +105,8 @@ const CardForm = ({ bench, setBench }) => {
             .required("Amount of trash cans required")
             .min(0, validationMinNumber),
         distanceToNextShop: Yup.number()
-            .min(0, validationMinNumber),
+            .min(0, validationMinNumber)
+            .nullable(true),
     });
 
     return (
@@ -106,18 +114,18 @@ const CardForm = ({ bench, setBench }) => {
             <Navbar />
             <Paper className={classes.root} >
                 <Formik
-                    initialValues={bench}
+                    initialValues={modeCreate ? {} : bench}
                     enableReinitialize={true}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
                         setSubmitting(true);
                         const dto = { ...bench, ...values };
                         console.log('DTO ', dto)
-                        if (bench.id !== 'new') {
+                        {/* if (bench.id !== 'new') {
                             axios.put(`http://localhost:8080/benches/${bench.id}`, dto)
                                 .then(response => {
                                     setBench(response.data);
-                                    window.location.assign(`/`);
+                                    history.push(`/`);
                                 })
                                 .catch(error => {
                                     console.error('Error in Put', error);
@@ -129,7 +137,7 @@ const CardForm = ({ bench, setBench }) => {
                             axios.post(`http://localhost:8080/benches`, dto)
                                 .then(response => {
                                     setBench(response.data);
-                                    window.location.assign(`/`);
+                                    history.push(`/`);
                                 })
                                 .catch(error => {
                                     console.error('Error in Post', error);
@@ -137,15 +145,15 @@ const CardForm = ({ bench, setBench }) => {
                                 .finally(() => {
                                     setSubmitting(false);
                                 })
-                        }
+                        } */}
                     }}
                 >
-                    {({ handleSubmit, errors, touched, handleChange, initialValues}) => {
+                    {({ handleSubmit, errors, touched, handleChange, initialValues }) => {
                         return (
                             <Fragment>
                                 <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                                     <Typography variant="h5" className={classes.heading}>
-                                        {bench.id === 'new' ? "Create publication" : "Change " + bench.title}
+                                        {modeCreate ? "Create publication" : "Change " + bench.title}
                                     </Typography>
                                     <Grid
                                         container
@@ -259,7 +267,7 @@ const CardForm = ({ bench, setBench }) => {
                                             />
                                         </Grid>
 
-                                        <Grid item md={5}/>
+                                        <Grid item md={5} />
 
                                         <Grid item md={5}>
                                             <FormControlLabel

@@ -3,24 +3,25 @@ import { Container, Paper, Switch, TextField, Button, makeStyles, withStyles } f
 import { Formik, Form } from "formik";
 import { LoginValidationSchema } from "../../other/validation/LoginValidationSchema";
 import SessionHandlerContext from "../../other/context/SessionHandlerContext";
+import { Link } from "react-router-dom";
 
 /**
  * This is the login page
  */
 
- // TO DO: fix height between form elements in case of showing error messages
+// TO DO: fix height between form elements in case of showing error messages
 
 const LoginForm = props => {
 
   const GreenSwitch = withStyles({
     switchBase: {
-        color: "#F3FAF0",
-        '&$checked': {
-            color: "#355A20",
-        },
-        '&$checked + $track': {
-            backgroundColor: "#355A20",
-        },
+      color: "#F3FAF0",
+      '&$checked': {
+        color: "#355A20",
+      },
+      '&$checked + $track': {
+        backgroundColor: "#355A20",
+      },
     },
     checked: {},
     track: {},
@@ -41,7 +42,7 @@ const LoginForm = props => {
       color: "#47792A",
       textAlign: "center"
     },
-    subButton: {
+    submitButton: {
       backgroundColor: "#355A20",
       color: "white",
       '&:hover': {
@@ -62,6 +63,12 @@ const LoginForm = props => {
     },
     switch: {
 
+    },
+    footer: {
+      textAlign: "center"
+    },
+    link: {
+      textDecoration: "none"
     }
   }));
 
@@ -148,14 +155,16 @@ const LoginForm = props => {
                 </div>
                 <div className={classes.formElement}>
                   <Button
-                    buttontype="default"
                     type="submit"
-                    variant="contained"
                     disabled={isSubmitting}
-                    className={classes.subButton}
+                    className={classes.submitButton}
                   >
                     Login
                   </Button>
+                </div>
+                <div className={classes.footer}>
+                  <p> Have you no account yet?</p>
+                  <Link className={classes.link} to="/signup">Sign up now</Link>
                 </div>
               </Form>
             );
