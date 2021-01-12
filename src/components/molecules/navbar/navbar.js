@@ -54,6 +54,10 @@ const Navbar = props => {
     props.history.push(`/maps`);
   };
 
+  const goToAccount = () => {
+    props.history.push(`/account`)
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={clsx(classes.root)}>
@@ -82,7 +86,7 @@ const Navbar = props => {
             :
             <div>
               <IconButton
-                onClick={() => console.log('Go to my account')}
+                onClick={goToAccount}
                 title={"My account - " + user.firstName + " " + user.lastName}
               >
                 <Avatar className={classes.avatar}>

@@ -35,7 +35,9 @@ export const SessionHandlerContextProvider = (props) => {
               .then(res => {
                 console.log('Show user info ', res);
                 localStorage.setItem("token", res.headers["authorization"])
-                setActiveUser(res.data)
+                let activeUser = res.data;
+                delete activeUser.password;
+                setActiveUser(activeUser)
                 history.push('/');
               })
               .error(err => {

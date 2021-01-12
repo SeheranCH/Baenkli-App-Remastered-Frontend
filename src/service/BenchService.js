@@ -12,6 +12,9 @@ const BenchService = {
     },
     getAll: () => {
         return api.get(`/benches`);
+    },
+    delete: (id) => {
+        return api.delete(`/benches/${id}`)
     }
 };
 

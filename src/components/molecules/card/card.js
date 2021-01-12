@@ -91,7 +91,7 @@ const PostCard = props => {
             <EditIcon color="primary" />
           </IconButton>
           : null}
-        {props.deleteButton == true ?
+        {props.deleteButton ?
           <IconButton aria-label="delete" onClick={props.deleteFunction}>
             <DeleteIcon color="error" />
           </IconButton>
@@ -116,8 +116,8 @@ const PostCard = props => {
             distanceToNextShop={props.distanceToNextShop}
             directions={props.directions}
             readOnly={props.readOnly}
-            valueQuietness={props.valueQuietness}
-            valueRating={props.valueRating}
+            averageQuiet={props.averageQuiet}
+            averageRating={props.averageRating}
           />
         </CardContent>
       </Collapse>

@@ -7,10 +7,7 @@ const validationPassword = "At least 1 upper-case letter, 1 lower-case letter an
 const validationMaxNames = "Max. 50 characters";
 const validationsMinPassword = "Min. 8 characters";
 
-export const UserValidationSchema = Yup.object().shape({
-    id: Yup.string()
-        .nullable(true)
-    ,
+export const CreateUserValidationSchema = Yup.object().shape({
     username: Yup.string()
         .trim()
         .max(50, validationMaxNames)

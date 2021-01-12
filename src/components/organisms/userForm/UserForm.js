@@ -2,15 +2,17 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles, TextField, Typography, Button, Switch, Paper, Container } from "@material-ui/core";
 import { Formik } from "formik";
-import { UserValidationSchema } from "../../other/validation/UserValidationSchema";
+import { CreateUserValidationSchema } from "../../other/validation/CreateUserValidationSchema";
+import { UpdateUserValidationSchema } from "../../other/validation/UpdateUserValidationSchema";
 import UserService from "../../../service/UserService";
 import SessionHandlerContext from "../../other/context/SessionHandlerContext";
 import {useHistory } from "react-router-dom";
+import OwnButton from "../../atoms/ownButton/OwnButton";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
-        marginTop: "10%"
-    },
+    // root: {
+    //     margin: "5%"
+    // },
     paper: {
         flexGrow: 1,
         paddingTop: "50px",
@@ -77,19 +79,20 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
     }, [showPassword])
 
     return (
-        <Container className={classes.root}>
+
             <Paper className={classes.paper}>
                 <Formik
                     initialValues={initialObject}
                     enableReinitialize
-                    validationSchema={UserValidationSchema}
+                    validationSchema={modeRegister ? CreateUserValidationSchema : UpdateUserValidationSchema}
                     onSubmit={(values) => {
                         var dto = { ...initialObject, ...values };
+                        if (values.password === null || values.password === "") {
+                            delete dto.password;
+                        }
                         delete dto.emailRepeat;
                         delete dto.passwordRepeat;
-                        console.log('DTO ', dto)
                         if (modeRegister) {
-                            console.log('ZEIG ', dto)
                             UserService.create(dto)
                                 .then(() => {
                                     history.push('/login')
@@ -105,16 +108,17 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                 .catch(err => {
                                     console.error('Error in UserForm: ', err);
                                 })
-
                         }
                     }}
                 >
-                    {({ handleSubmit, errors, touched, handleChange, initialValues, isSubmitting, values }) => {
+                    {({ handleSubmit, errors, touched, handleChange, initialValues, isSubmitting, values, dirty }) => {
                         return (
                             <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                                 <p className={classes.title}>
                                     <b>
-                                        Register
+                                        {modeRegister ?
+                                        "Register"
+                                        : "Update"}
                                     </b>
                                 </p>
                                 <div className={classes.inputs}>
@@ -147,7 +151,7 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                     <TextField
                                         id="password"
                                         name="password"
-                                        label="Password *"
+                                        label={modeRegister ? "Password *" : "New password"}
                                         variant="outlined"
                                         type={typePassword}
                                         error={errors.password && touched.password}
@@ -159,7 +163,7 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                         <TextField
                                             id="passwordRepeat"
                                             name="passwordRepeat"
-                                            label="Confirm password *"
+                                            label={modeRegister ? "Confirm password *" : "Confirm new password*"}
                                             variant="outlined"
                                             type={typePassword}
                                             error={errors.passwordRepeat && touched.passwordRepeat}
@@ -219,15 +223,11 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                                     />
                                     {textShowPassword}
                                     <Typography />
-                                    <Button
-                                        type="submit"
-                                        disabled={isSubmitting}
-                                        className={classes.submitButton}
-                                    >
-                                        {modeRegister ?
-                                            "Sign up"
-                                            : "Update"}
-                                    </Button>
+                                    <OwnButton
+                                        typeOfButton={'submit'}
+                                        disabled={!modeRegister && !dirty}
+                                        text={modeRegister ? "Sign up" : "Update"}
+                                    />
                                     <Typography className={classes.helperText}>
                                         {modeRegister &&
                                             <div className={classes.footer}>
@@ -242,7 +242,6 @@ const UserForm = ({ initialObject, modeRegister, goToLogin }) => {
                     }}
                 </Formik>
             </Paper>
-        </Container>
     );
 };
 export default UserForm;

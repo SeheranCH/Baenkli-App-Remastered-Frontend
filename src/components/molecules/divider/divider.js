@@ -82,7 +82,7 @@ export default function CardDivider(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText secondary="Quiet" />
-        <StarRating value={props.valueQuietness} readOnly={props.readOnly} />
+        <StarRating value={props.averageQuiet} readOnly={props.readOnly} />
       </ListItem>
       <Divider variant="inset" component="li" />
 
@@ -94,7 +94,7 @@ export default function CardDivider(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText secondary="General rating" />
-        <StarRating value={props.valueRating} readOnly={props.readOnly} />
+        <StarRating value={props.averageRating} readOnly={props.readOnly} />
       </ListItem>
       <Divider variant="inset" component="li" />
     </List>

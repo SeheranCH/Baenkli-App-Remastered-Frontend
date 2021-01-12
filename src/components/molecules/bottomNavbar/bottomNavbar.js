@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         top: 'auto',
         bottom: 0,
         background: "#93CB56",
-        color: "#355A20"
+        color: "#355A20",
     },
     grow: {
         flexGrow: 1,

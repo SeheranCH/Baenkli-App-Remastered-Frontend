@@ -3,6 +3,20 @@ import Navbar from "../../molecules/navbar/Navbar";
 import CardForm from "../../organisms/cardForm/CardForm";
 import Grid from "@material-ui/core/Grid"
 
+const initialObject = {
+    title: "",
+    description: "",
+    latitude: null,
+    longitude: null,
+    amountBenches: null,
+    amountFirePlaces: null,
+    amountTrashCans: null,
+    distanceToNextShop: null,
+    directions: "",
+    hasMeadow: false,
+    locationOnWater: false
+}
+
 const NewBenchPage = () => {
 
     return (
@@ -10,7 +24,7 @@ const NewBenchPage = () => {
             <Navbar />
             <Grid container spacing={3} justify="center" alignItems="center">
                 <Grid item xs={4}>
-                    <CardForm modeCreate />
+                    <CardForm modeCreate bench={initialObject}/>
                 </Grid>
             </Grid>
         </Fragment>

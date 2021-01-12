@@ -4,6 +4,7 @@ import { Formik, Form } from "formik";
 import { LoginValidationSchema } from "../../other/validation/LoginValidationSchema";
 import SessionHandlerContext from "../../other/context/SessionHandlerContext";
 import { Link } from "react-router-dom";
+import OwnButton from "../../atoms/ownButton/OwnButton";
 
 /**
  * This is the login page
@@ -28,9 +29,6 @@ const LoginForm = props => {
   })(Switch);
 
   const useStyles = makeStyles((theme) => ({
-    root: {
-      marginTop: "10%",
-    },
     paper: {
       flexGrow: 1,
       paddingTop: "50px",
@@ -91,8 +89,6 @@ const LoginForm = props => {
   }, [showPassword])
 
   return (
-
-    <Container className={classes.root}>
       <Paper className={classes.paper}>
         <Formik
           initialValues={{
@@ -154,13 +150,11 @@ const LoginForm = props => {
                   {textPassword}
                 </div>
                 <div className={classes.formElement}>
-                  <Button
-                    type="submit"
+                  <OwnButton
+                    typeOfButton={'submit'}
                     disabled={isSubmitting}
-                    className={classes.submitButton}
-                  >
-                    Login
-                  </Button>
+                    text={"Login"}
+                  />
                 </div>
                 <div className={classes.footer}>
                   <p> Have you no account yet?</p>
@@ -171,7 +165,6 @@ const LoginForm = props => {
           }}
         </Formik>
       </Paper>
-    </Container>
   );
 };
 
