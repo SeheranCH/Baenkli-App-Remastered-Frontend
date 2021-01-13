@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
         '&:disabled': {
             color: "E2E2D0",
             backgroundColor: "#FFFFFF"
-        }  
+        }
     }
 }));
 
@@ -51,10 +51,13 @@ const OwnButton = ({ typeOfButton, text, disabled, onClickFunc }) => {
                 <Button disabled={disabled} type={"submit"} className={classes.submitButton} variant={"outlined"}>{text}</Button>
                 : null}
             {typeOfButton === 'cancel' ?
-                <Button disabled={disabled} onClick={onClickFunc} className={classes.cancelButton} variant={"outlined"}>{text}</Button>
+                <Button disabled={disabled} onClick={onClickFunc} className={classes.cancelButton} variant={"outlined"}>{"Cancel"}</Button>
                 : null}
             {typeOfButton === 'reset' ?
-                <Button disabled={disabled} type={"reset"} className={classes.resetButton} variant={"outlined"}>{text}</Button>
+                <Button disabled={disabled} type={"reset"} className={classes.resetButton} variant={"outlined"}>{"Reset"}</Button>
+                : null}
+            {typeOfButton === 'confirm' ?
+                <Button disabled={disabled} onClick={onClickFunc} className={classes.submitButton} variant={"outlined"}>{"Confirm"}</Button>
                 : null}
         </div>
     );

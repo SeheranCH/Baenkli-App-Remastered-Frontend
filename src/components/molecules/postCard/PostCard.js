@@ -65,7 +65,9 @@ const PostCard = props => {
     <Card className={classes.root}>
       <CardHeader
         avatar={
-          <Avatar aria-label="recipe" className={classes.avatar} />
+          <Avatar className={classes.avatar}>
+            {props.avatarTitle}
+          </Avatar>
         }
         action={
           <IconButton aria-label="settings" onClick={() => redirectPage(props.id)}>

@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 const Navbar = props => {
 
   const { user, logout } = useContext(SessionHandlerContext);

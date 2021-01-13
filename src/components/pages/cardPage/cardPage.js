@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from '@material-ui/core/styles';
 import Navbar from "../../molecules/navbar/Navbar";
-import PostCard from "../../molecules/card/Card";
+import PostCard from "../../molecules/postCard/PostCard";
 import CardForm from "../../organisms/cardForm/CardForm";
 import Grid from '@material-ui/core/Grid';
 import Rating from "../../atoms/rating/Rating";
