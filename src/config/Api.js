@@ -19,7 +19,7 @@ api.interceptors.request.use(
 
 api.interceptors.request.use(
   request => {
-    const info = `REQUEST ${request.method.toLocaleUpperCase()} ${request.url}`;
+    const info = `Request ${request.method.toLocaleUpperCase()} ${request.url}`;
 
     if(request.method.toLocaleLowerCase() === "get") {
       console.debug(info);
@@ -35,7 +35,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => {
     
-    console.debug(`RESPONSE ${response.config.method.toLocaleUpperCase()} ${response.config.url}`, response.data);
+    console.debug(`Response ${response.config.method.toLocaleUpperCase()} ${response.config.url}`, response.data);
 
     return response;
   },

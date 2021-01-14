@@ -114,10 +114,12 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
                 {({ handleSubmit, errors, touched, handleChange, initialValues, dirty }) => {
                     return (
                         <Fragment>
-                            <form method="post" onSubmit={handleSubmit} onChange={handleChange}>  
+                            <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
+                                {!modeDialog ?
                                 <Typography variant="h5" className={classes.heading}>
                                         {modeCreate ? "Create publication" : "Change " + bench.title}
                                     </Typography>
+                                : null}
                                 <Grid
                                     container
                                     spacing={4}

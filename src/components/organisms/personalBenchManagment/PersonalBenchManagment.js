@@ -179,7 +179,7 @@ const PersonalBenchManagment = ({ benches, benchHandler }) => {
             <OwnDialog
                 isOpen={openEdit}
                 handler={dialogHandlerEdit}
-                mode={'edit'}
+                mode={'editBench'}
                 titleDialog={"Edit bench '"+ benchToEdit.title + "'"}
                 action={changeBench}
                 bench={benchToEdit}

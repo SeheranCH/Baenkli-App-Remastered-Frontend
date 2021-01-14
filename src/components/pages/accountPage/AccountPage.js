@@ -10,6 +10,8 @@ import PersonalBenchManagment from "../../organisms/personalBenchManagment/Perso
 import PeopleIcon from '@material-ui/icons/People';
 import BenchService from "../../../service/BenchService";
 import OwnTable from "../../organisms/ownTable/OwnTable";
+import UserService from "../../../service/UserService";
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -26,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
 /*
     Data
 */
-function createData(id, orderStatus, paymentStatus, total, articles) {
-    return { id, orderStatus, paymentStatus, total, articles };
+function createData(id, username, firstName, lastName, email) {
+    return { id, username, firstName, lastName, email };
 }
 
 const rows = [
@@ -44,11 +46,11 @@ const rows = [
 ];
 
 const headCells = [
-    { id: 'id', label: 'Order ID' },
-    { id: 'orderStatus', label: 'Order status' },
-    { id: 'paymentStatus', label: 'Payment status' },
-    { id: 'payAmount', label: 'Total' },
-    { id: 'articles', label: 'Articles' },
+    { id: 'id', label: 'User Id' },
+    { id: 'username', label: 'Username' },
+    { id: 'email', label: 'Email' },
+    { id: 'firstName', label: 'First Name' },
+    { id: 'lastName', label: 'Last Name' },
 ];
 
 let fakeBenches = [
@@ -281,9 +283,11 @@ const AccountPage = () => {
 
     const { user } = useContext(SessionHandlerContext);
 
-    const [navigation, setNavigation] = useState("personalData");
+    const [navigation, setNavigation] = useState("userManagment");
 
     const [ownBenches, setOwnBenches] = useState([]);
+
+    const [users, setUsers] = useState([]);
 
     const handleChange = (e, newValue) => {
         setNavigation(newValue);
@@ -294,11 +298,36 @@ const AccountPage = () => {
             .then(res => {
                 setOwnBenches(res.data);
             })
+            .catch(err => {
+                console.error('Error in AccountPage: ', err);
+            });
+    }
+
+    function getFilterdUsers (data) {
+        return data.map(u => {
+            delete u.password;
+            return u;
+        })
+    }
+
+    const getAllUsers = () => {
+        UserService.getAll()
+            .then(res => {
+                let filteredUsers = getFilterdUsers(res.data);
+                setUsers(filteredUsers);
+            })
+            .catch(err => {
+                console.error('Error in AccountPage: ', err);
+            });
     }
 
     useEffect(() => {
-        getOwnBenches(user.id)
-    }, [user, setOwnBenches])
+        getOwnBenches(user.id);
+    }, [user, setOwnBenches]);
+
+    useEffect(() => {
+        getAllUsers();
+    }, [user, setUsers]);
 
     return (
         <Fragment>
@@ -330,8 +359,9 @@ const AccountPage = () => {
                             : null}
                         {navigation === 'userManagment' ?
                             <OwnTable
-                                data={rows}
+                                data={users}
                                 headCells={headCells}
+                                userHandler={setUsers}
                             />
                             : null}
                     </Paper>

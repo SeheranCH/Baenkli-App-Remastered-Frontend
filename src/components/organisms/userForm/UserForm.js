@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const UserForm = ({ initialObject, modeRegister }) => {
+const UserForm = ({ initialObject, modeRegister, modeDialog, updateFunc }) => {
 
     const { setActiveUser } = useContext(SessionHandlerContext);
 
@@ -100,7 +100,10 @@ const UserForm = ({ initialObject, modeRegister }) => {
                             .catch(err => {
                                 console.error('Error in UserForm: ', err);
                             })
-                    } else {
+                    } else if (modeDialog) {
+                        updateFunc(dto);
+                    }
+                    else {
                         UserService.update(dto.id, dto)
                             .then((res) => {
                                 setActiveUser(res.data);
@@ -111,7 +114,7 @@ const UserForm = ({ initialObject, modeRegister }) => {
                     }
                 }}
             >
-                {({ handleSubmit, errors, touched, handleChange, initialValues, isSubmitting, values }) => {
+                {({ handleSubmit, errors, touched, handleChange, initialValues, dirty, values }) => {
                     return (
                         <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                             <Title text={modeRegister ? "Register" : null}/>
@@ -220,6 +223,7 @@ const UserForm = ({ initialObject, modeRegister }) => {
                                 <OwnButton
                                     typeOfButton={'submit'}
                                     text={modeRegister ? "Sign up" : "Update"}
+                                    disabled={!modeRegister ? !dirty : false}
                                 />
                                 <Typography className={classes.helperText}>
                                     {modeRegister &&

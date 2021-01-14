@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControl, FilledInput, InputAdornment } from '@material-ui/core';
 import OwnButton from "../../atoms/ownButton/OwnButton";
 import CardForm from "../../organisms/cardForm/CardForm";
+import UserForm from "../../organisms/userForm/UserForm";
 
 
-const OwnDialog = ({ isOpen, handler, action, mode, titleDialog, bench }) => {
+const OwnDialog = ({ isOpen, handler, action, mode, titleDialog, bench, user }) => {
 
     return (
         <div>
@@ -18,19 +19,19 @@ const OwnDialog = ({ isOpen, handler, action, mode, titleDialog, bench }) => {
                     {titleDialog}
                 </DialogTitle>
                 <DialogContent>
-                    {mode === 'edit' ?
+                    {mode === 'editBench' ?
                         <CardForm
                             updateFunc={action}
                             bench={bench}
                             modeDialog
                         />
                         : null}
-                    {mode === 'createArticle' ?
-                        {/* <ArticleForm
-                            article={article}
-                            mode={'create'}
-                            handleDialog={handler}
-                        /> */}
+                    {mode === 'editUser' ?
+                        <UserForm
+                            initialObject={user}
+                            updateFunc={action}
+                            modeDialog
+                        />
                         : null}
                 </DialogContent>
                 <DialogActions>
