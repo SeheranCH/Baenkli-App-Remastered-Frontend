@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import { red } from '@material-ui/core/colors';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import CardDivider from '../divider/divider'
+import CardDivider from '../divider/Divider'
 import { withRouter } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
@@ -86,12 +86,12 @@ const PostCard = props => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {props.editButton == true ?
+        {props.editButton ?
           <IconButton aria-label="edit" onClick={props.editFunction}>
             <EditIcon color="primary" />
           </IconButton>
           : null}
-        {props.deleteButton == true ?
+        {props.deleteButton ?
           <IconButton aria-label="delete" onClick={props.deleteFunction}>
             <DeleteIcon color="error" />
           </IconButton>
@@ -116,8 +116,8 @@ const PostCard = props => {
             distanceToNextShop={props.distanceToNextShop}
             directions={props.directions}
             readOnly={props.readOnly}
-            valueQuietness={props.valueQuietness}
-            valueRating={props.valueRating}
+            averageQuiet={props.averageQuiet}
+            averageRating={props.averageRating}
           />
         </CardContent>
       </Collapse>

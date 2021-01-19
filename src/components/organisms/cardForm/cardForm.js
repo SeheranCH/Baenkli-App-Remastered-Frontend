@@ -1,19 +1,21 @@
 import React, { Fragment, useState } from "react";
-import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar"
+import Navbar from "../../molecules/navbar/Navbar"
 import Grid from '@material-ui/core/Grid';
 import { Formik } from "formik";
-import * as Yup from "yup";
 import { TextField } from "@material-ui/core";
 import Switch from '@material-ui/core/Switch';
-import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { useHistory } from 'react-router-dom'
+import BenchService from "../../../service/BenchService";
+import OwnButton from "../../atoms/ownButton/OwnButton";
+import { CardValidationSchema } from "../../other/validation/CardValidationSchema";
 
-const CardForm = ({ bench, setBench }) => {
+
+const CardForm = ({ bench, setBench, modeCreate }) => {
 
     const GreenSwitch = withStyles({
         switchBase: {
@@ -39,22 +41,14 @@ const CardForm = ({ bench, setBench }) => {
             textAlign: "center",
             margin: '2vh'
         },
-        subButton: {
-            backgroundColor: "#355A20",
-            color: "white",
-            '&:hover': {
-                backgroundColor: "#47792A",
-                color: '#FFF'
-            }
-
-        },
     }));
 
     const classes = useStyles();
 
-    const [hasMeadow, setHasMeadow] = useState(bench === undefined ? false : bench.hasMeadow);
-    const [locationOnWater, setLocationOnWater] = useState(bench === undefined ? false : bench.locationOnWater);
-    const [submitting, setSubmitting] = useState(false);
+    const history = useHistory();
+
+    const [hasMeadow, setHasMeadow] = useState(bench.hasMeadow);
+    const [locationOnWater, setLocationOnWater] = useState(bench.locationOnWater);
 
     const handleChangeMeadow = () => {
         setHasMeadow(!hasMeadow);
@@ -64,43 +58,6 @@ const CardForm = ({ bench, setBench }) => {
         setLocationOnWater(!locationOnWater);
     }
 
-    const regexName = /^[a-zA-Z äöüéèàÜÖÄÉÈÀ,+-]+$/;
-    const validationName = "Please enter only letters";
-    const validationMax = "Max. 250 characters"
-    const validationMinNumber = "Minimum: 0";
-    const validationMinLatitude = "Minimum of latitude: -90";
-    const validationMaxLatitude = "Maximum of latitude: +90";
-    const validationMinLongitude = "Minimum of longitude: -180";
-    const validationMaxLongitude = "Maximum of longitude: +180";
-
-    const validationSchema = Yup.object().shape({
-        title: Yup.string()
-            .trim()
-            .matches(regexName, validationName)
-            .required("Title required")
-            .max(250, validationMax),
-        description: Yup.string()
-            .trim()
-            .max(250, validationMax),
-        latitude: Yup.number()
-            .min(-90, validationMinLatitude)
-            .max(90, validationMaxLatitude),
-        longitude: Yup.number()
-            .min(-180, validationMinLongitude)
-            .max(180, validationMaxLongitude),
-        amountBenches: Yup.number()
-            .required("Amount of benches required")
-            .min(0, validationMinNumber),
-        amountFirePlaces: Yup.number()
-            .required("Amount of fire places required")
-            .min(0, validationMinNumber),
-        amountTrashCans: Yup.number()
-            .required("Amount of trash cans required")
-            .min(0, validationMinNumber),
-        distanceToNextShop: Yup.number()
-            .min(0, validationMinNumber),
-    });
-
     return (
         <div>
             <Navbar />
@@ -108,16 +65,36 @@ const CardForm = ({ bench, setBench }) => {
                 <Formik
                     initialValues={bench}
                     enableReinitialize={true}
-                    validationSchema={validationSchema}
+                    validationSchema={CardValidationSchema}
                     onSubmit={(values) => {
-                        setSubmitting(true);
                         const dto = { ...bench, ...values };
                         console.log('DTO ', dto)
-                        if (bench.id !== 'new') {
+                        if (modeCreate) {
+                            BenchService.create(dto)
+                                .then(res => {
+                                    history.push(`/`);
+                                })
+                                .catch(err => {
+                                    console.error('Error in CardForm ', err);
+                                })
+                                .finally(() => {
+                                })
+                        } else {
+                            BenchService.update(dto.id, dto)
+                                .then(res => {
+                                    history.push(`/`);
+                                })
+                                .catch(err => {
+                                    console.error('Error in CardForm ', err);
+                                })
+                                .finally(() => {
+                                })
+                        }
+                        {/* if (bench.id !== 'new') {
                             axios.put(`http://localhost:8080/benches/${bench.id}`, dto)
                                 .then(response => {
                                     setBench(response.data);
-                                    window.location.assign(`/`);
+                                    history.push(`/`);
                                 })
                                 .catch(error => {
                                     console.error('Error in Put', error);
@@ -129,7 +106,7 @@ const CardForm = ({ bench, setBench }) => {
                             axios.post(`http://localhost:8080/benches`, dto)
                                 .then(response => {
                                     setBench(response.data);
-                                    window.location.assign(`/`);
+                                    history.push(`/`);
                                 })
                                 .catch(error => {
                                     console.error('Error in Post', error);
@@ -137,15 +114,15 @@ const CardForm = ({ bench, setBench }) => {
                                 .finally(() => {
                                     setSubmitting(false);
                                 })
-                        }
+                        } */}
                     }}
                 >
-                    {({ handleSubmit, errors, touched, handleChange, initialValues}) => {
+                    {({ handleSubmit, errors, touched, handleChange, initialValues, dirty }) => {
                         return (
                             <Fragment>
                                 <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                                     <Typography variant="h5" className={classes.heading}>
-                                        {bench.id === 'new' ? "Create publication" : "Change " + bench.title}
+                                        {modeCreate ? "Create publication" : "Change " + bench.title}
                                     </Typography>
                                     <Grid
                                         container
@@ -157,8 +134,7 @@ const CardForm = ({ bench, setBench }) => {
                                             <TextField
                                                 id="standard-basic"
                                                 name="title"
-                                                label="Title"
-                                                required
+                                                label="Title *"
                                                 error={errors.title && touched.title}
                                                 helperText={touched.title ? errors.title : null}
                                                 defaultValue={initialValues.title}
@@ -203,8 +179,7 @@ const CardForm = ({ bench, setBench }) => {
                                             <TextField
                                                 id="standard-number"
                                                 name="amountBenches"
-                                                label="Amount benches"
-                                                required
+                                                label="Amount benches *"
                                                 error={errors.amountBenches && touched.amountBenches}
                                                 helperText={touched.amountBenches ? errors.amountBenches : null}
                                                 defaultValue={initialValues.amountBenches}
@@ -215,8 +190,7 @@ const CardForm = ({ bench, setBench }) => {
                                             <TextField
                                                 id="standard-number"
                                                 name="amountFirePlaces"
-                                                label="Amount fire places"
-                                                required
+                                                label="Amount fire places *"
                                                 error={errors.amountFirePlaces && touched.amountFirePlaces}
                                                 helperText={touched.amountFirePlaces ? errors.amountFirePlaces : null}
                                                 defaultValue={initialValues.amountFirePlaces}
@@ -227,8 +201,7 @@ const CardForm = ({ bench, setBench }) => {
                                             <TextField
                                                 id="standard-number"
                                                 name="amountTrashCans"
-                                                label="Amount trash cans"
-                                                required
+                                                label="Amount trash cans *"
                                                 error={errors.amountTrashCans && touched.amountTrashCans}
                                                 helperText={touched.amountTrashCans ? errors.amountTrashCans : null}
                                                 defaultValue={initialValues.amountTrashCans}
@@ -259,7 +232,7 @@ const CardForm = ({ bench, setBench }) => {
                                             />
                                         </Grid>
 
-                                        <Grid item md={5}/>
+                                        <Grid item md={5} />
 
                                         <Grid item md={5}>
                                             <FormControlLabel
@@ -288,17 +261,17 @@ const CardForm = ({ bench, setBench }) => {
                                         </Grid>
 
                                         <Grid item md={5}>
-                                            <Button variant="contained" disabled={submitting} type="submit" className={classes.subButton}>
-                                                Submit
-                                            </Button>
+                                            <OwnButton
+                                                typeOfButton={'submit'}
+                                                text={modeCreate ? "Create" : "Update"}
+                                                disabled={!modeCreate ? !dirty : false}
+                                            />
                                         </Grid>
                                         <Grid item md={5}>
-                                            <Button variant="contained" type="reset" className={classes.resButton} onClick={() => {
-                                                setHasMeadow(false);
-                                                setLocationOnWater(false);
-                                            }}>
-                                                Reset
-                                       </Button>
+                                            <OwnButton
+                                                typeOfButton={'reset'}
+                                                text={'Reset'}
+                                            />
                                         </Grid>
 
                                     </Grid>

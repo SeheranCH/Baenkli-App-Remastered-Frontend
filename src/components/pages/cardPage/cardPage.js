@@ -1,13 +1,22 @@
 import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar";
-import PostCard from "../../molecules/card/card";
-import CardForm from "../../organisms/cardForm/cardForm";
+import { makeStyles } from '@material-ui/core/styles';
+import Navbar from "../../molecules/navbar/Navbar";
+import PostCard from "../../molecules/card/Card";
+import CardForm from "../../organisms/cardForm/CardForm";
 import Grid from '@material-ui/core/Grid';
-import Rating from "../../atoms/rating/rating";
+import Rating from "../../atoms/rating/Rating";
 import Typography from '@material-ui/core/Typography';
 
+const useStyles = makeStyles((theme) => ({
+    input: {
+        marginBottom: "200px"
+    },
+}));
+
 const CardPage = (props) => {
+
+    const classes = useStyles();
 
     const postCardId = props.match.params.id;
     const [editing, setEditing] = useState(false);
@@ -129,8 +138,8 @@ const CardPage = (props) => {
                             deleteButton={true}
                             editButton={true}
                             title={bench.title}
-                            valueQuietness={calQuiet(bench.quiets)}
-                            valueRating={calRating(bench.ratings)}
+                            averageQuiet={calQuiet(bench.quiets)}
+                            averageRating={calRating(bench.ratings)}
                             amountBenches={bench.amountBenches}
                             amountFirePlaces={bench.amountFirePlaces}
                             amountTrashCans={bench.amountTrashCans}
@@ -145,31 +154,33 @@ const CardPage = (props) => {
                     <Grid item md={4}>
                         <Typography variant="body2" color="textSecondary" component="h6">
                             Rate
-                        </Typography>
-                        <Rating name="rating-feedback"
+                            </Typography>
+                        <Rating
+                            name="rating-feedback"
                             precicion={0.5}
                             value={valueRating}
                             readOnly={readOnlyRating}
-                            onChange={(event) => {
-                                setValueRating(event.target.value);
-                                postRating({ rating: event.target.value });
+                            onChange={(event, value) => {
+                                setValueRating(value);
+                                postRating({ rating: value });
                                 setReadOnlyRating(true);
-                                event.preventDefault();
+                                console.log('VALUE RATING ', value)
                             }}
                         />
-
                         <Typography variant="body2" color="textSecondary" component="h6">
                             Quiet
                         </Typography>
-                        <Rating name="quiet-feedback"
+                        <Rating
+                            name="quiet-feedback"
                             precicion={0.5}
                             value={valueQuiet}
                             readOnly={readOnlyQuiet}
-                            onChange={(event) => {
-                              setValueQuiet(event.target.value);
-                              postQuiet({ quiet: event.target.value });
-                              setReadOnlyQuiet(true);
-                              event.preventDefault();
+                            onChange={(event, value) => {
+                                setValueQuiet(value);
+                                postQuiet({ quiet: value });
+                                setReadOnlyQuiet(true);
+                                console.log('VALUE Quiet ', value)
+
                             }}
                         />
                     </Grid>
