@@ -47,22 +47,6 @@ const CardPage = (props) => {
 
     }
 
-    function calQuiet(quietArray) {
-        if (quietArray === undefined) {
-            return 0;
-        } else {
-            console.log(bench.quiet)
-            var total = 0;
-            var length = 0;
-            console.log("rating,", quietArray)
-            length = quietArray.length;
-            quietArray.map(r => total += r.quiet);
-            let result = total / length;
-
-            return Math.round(result * 2) / 2;
-        }
-    }
-
     function getOneBench(id) {
         if (id !== undefined) {
             axios.get(`http://localhost:8080/benches/${id}`)
@@ -112,13 +96,6 @@ const CardPage = (props) => {
             })
     }
 
-    function putBenchByQuiet(quietDTO) {
-        axios.put(`http://localhost:8080/benches/${bench.id}/quiet/${quietDTO.id}`, bench)
-            .then(res => {
-                setBench(res.data);
-            })
-    }
-
     return (
         <Fragment>
             <Navbar />
@@ -138,7 +115,7 @@ const CardPage = (props) => {
                             deleteButton={true}
                             editButton={true}
                             title={bench.title}
-                            averageQuiet={calQuiet(bench.quiets)}
+                            averageQuiet={bench.quietness}
                             averageRating={calRating(bench.ratings)}
                             amountBenches={bench.amountBenches}
                             amountFirePlaces={bench.amountFirePlaces}
