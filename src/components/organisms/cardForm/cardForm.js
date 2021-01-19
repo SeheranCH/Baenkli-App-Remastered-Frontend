@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useContext, useState } from "react";
 import Navbar from "../../molecules/navbar/Navbar"
 import Grid from '@material-ui/core/Grid';
 import { Formik } from "formik";
@@ -13,6 +13,7 @@ import { useHistory } from 'react-router-dom'
 import BenchService from "../../../service/BenchService";
 import OwnButton from "../../atoms/ownButton/OwnButton";
 import { CardValidationSchema } from "../../other/validation/CardValidationSchema";
+import SessionHandlerContext from "../../other/context/SessionHandlerContext";
 
 
 const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
@@ -35,7 +36,7 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
         rootNormal: {
             background: "#e6f3d8",
             color: "black",
-            marginTop: "150px",
+            marginTop: "100px",
         },
         rootDialog: {
             background: "#e6f3d8",
@@ -49,6 +50,8 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
     }));
 
     const classes = useStyles();
+
+    const { user } = useContext(SessionHandlerContext);
 
     const history = useHistory();
 
@@ -70,9 +73,9 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
                 enableReinitialize
                 validationSchema={CardValidationSchema}
                 onSubmit={(values) => {
-                    const dto = { ...bench, ...values };
-                    console.log('DTO ', dto)
+                    var dto = { ...bench, ...values };
                     if (modeCreate) {
+                        dto = { ...dto, user: user };
                         BenchService.create(dto)
                             .then(res => {
                                 history.push(`/`);
@@ -85,28 +88,15 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
                     } else if (modeDialog) {
                         updateFunc(dto);
                     } else {
-                        if (bench.id !== null) {
-                            BenchService.update(dto.id, dto)
-                                .then(res => {
-                                    history.push(`/`);
-                                })
-                                .catch(err => {
-                                    console.error('Error in CardForm ', err);
-                                })
-                                .finally(() => {
-                                })
-                        } else {
-                            BenchService.create(dto)
-                                .then(res => {
-                                    history.push(`/login`)
-                                })
-                                .catch(err => {
-                                    console.error('Error in CardForm ', err);
-                                })
-                                .finally(() => {
-                                })
-                        }
-                       
+                        BenchService.update(dto.id, dto)
+                            .then(res => {
+                                history.push(`/`);
+                            })
+                            .catch(err => {
+                                console.error('Error in CardForm ', err);
+                            })
+                            .finally(() => {
+                            })
                     }
                 }
                 }
@@ -116,10 +106,10 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
                         <Fragment>
                             <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
                                 {!modeDialog ?
-                                <Typography variant="h5" className={classes.heading}>
-                                        {modeCreate ? "Create publication" : "Change " + bench.title}
+                                    <Typography variant="h5" className={classes.heading}>
+                                        {modeCreate ? "Create new bench" : "Change " + bench.title}
                                     </Typography>
-                                : null}
+                                    : null}
                                 <Grid
                                     container
                                     spacing={4}
@@ -276,7 +266,7 @@ const CardForm = ({ bench, setBench, modeCreate, updateFunc, modeDialog }) => {
                     )
                 }}
             </Formik>
-        </Paper>
+        </Paper >
     )
 }
 

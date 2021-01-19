@@ -87,7 +87,7 @@ const UserForm = ({ initialObject, modeRegister, modeDialog, updateFunc }) => {
                 validationSchema={modeRegister ? CreateUserValidationSchema : UpdateUserValidationSchema}
                 onSubmit={(values) => {
                     var dto = { ...initialObject, ...values };
-                    if (values.password === null || values.password === "") {
+                    if (!modeRegister) {
                         delete dto.password;
                     }
                     delete dto.emailRepeat;
@@ -117,7 +117,7 @@ const UserForm = ({ initialObject, modeRegister, modeDialog, updateFunc }) => {
                 {({ handleSubmit, errors, touched, handleChange, initialValues, dirty, values }) => {
                     return (
                         <form method="post" onSubmit={handleSubmit} onChange={handleChange}>
-                            <Title text={modeRegister ? "Register" : null}/>
+                            <Title text={modeRegister ? "Register" : null} />
                             <div className={classes.inputs}>
                                 <TextField
                                     id="username"
@@ -182,19 +182,19 @@ const UserForm = ({ initialObject, modeRegister, modeDialog, updateFunc }) => {
                                     />
                                     : null}
                             </div>
-                            <div className={classes.inputs}>
-                                <TextField
-                                    id="password"
-                                    name="password"
-                                    label={modeRegister ? "Password *" : "New password"}
-                                    variant="outlined"
-                                    type={typePassword}
-                                    error={errors.password && touched.password}
-                                    helperText={touched.password ? errors.password : null}
-                                    className={classes.input}
-                                    defaultValue={initialValues.password}
-                                />
-                                {modeRegister || initialValues.password !== values.password ?
+                            {modeRegister ?
+                                <div className={classes.inputs}>
+                                    <TextField
+                                        id="password"
+                                        name="password"
+                                        label={modeRegister ? "Password *" : "New password"}
+                                        variant="outlined"
+                                        type={typePassword}
+                                        error={errors.password && touched.password}
+                                        helperText={touched.password ? errors.password : null}
+                                        className={classes.input}
+                                        defaultValue={initialValues.password}
+                                    />
                                     <TextField
                                         id="passwordRepeat"
                                         name="passwordRepeat"
@@ -205,9 +205,8 @@ const UserForm = ({ initialObject, modeRegister, modeDialog, updateFunc }) => {
                                         helperText={touched.passwordRepeat ? errors.passwordRepeat : null}
                                         className={classes.input}
                                     />
-                                    : null}
-                            </div>
-
+                                </div>
+                                : null}
                             <div className={classes.footer}>
                                 <Typography />
                                 <Switch
