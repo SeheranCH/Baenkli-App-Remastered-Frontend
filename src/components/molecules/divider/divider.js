@@ -11,9 +11,12 @@ import FireplaceIcon from '@material-ui/icons/Fireplace';
 import WeekendIcon from '@material-ui/icons/Weekend';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 import DirectionsIcon from '@material-ui/icons/Directions';
-import StarRating from '../../atoms/rating/rating';
+import StarRating from '../../atoms/rating/Rating';
 import SpaIcon from '@material-ui/icons/Spa';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
+import CustomizedRating from '../../atoms/customizedRating/CustomizedRating';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,7 +85,7 @@ export default function CardDivider(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText secondary="Quiet" />
-        <StarRating value={props.valueQuietness} readOnly={props.readOnly} />
+        <CustomizedRating value={props.averageQuiet} readOnly={props.readOnly}/>
       </ListItem>
       <Divider variant="inset" component="li" />
 
@@ -94,7 +97,31 @@ export default function CardDivider(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText secondary="General rating" />
-        <StarRating value={props.valueRating} readOnly={props.readOnly} />
+        <StarRating value={props.averageRating} readOnly={props.readOnly} />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            {props.hasMeadow ?
+              <CheckIcon />
+              : <ClearIcon />}
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText secondary="Has Meadow" />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            {props.locationOnWater ?
+              <CheckIcon />
+              : <ClearIcon />}
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText secondary="Lays on water" />
       </ListItem>
       <Divider variant="inset" component="li" />
     </List>

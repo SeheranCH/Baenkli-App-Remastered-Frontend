@@ -1,12 +1,12 @@
 import React from 'react';
-import Router from "./components/other/router/router";
+import Router from "./components/other/router/Router";
+import { SessionHandlerContextProvider } from './components/other/context/SessionHandlerContext';
 
-function App() {
+export default function App() {
   return (
-    <div>
+    <SessionHandlerContextProvider>
       <Router />
-    </div>
-  );
-}
+    </SessionHandlerContextProvider>
 
-export default App;
+  );
+};

@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         top: 'auto',
         bottom: 0,
         background: "#93CB56",
-        color: "#355A20"
+        color: "#355A20",
     },
     grow: {
         flexGrow: 1,
@@ -51,7 +51,7 @@ function BottomNavbar(props) {
     const classes = useStyles();
 
     const goToAddBench = () => {
-        props.history.push(`/bench/new`);
+        props.history.push(`/create`);
     }
 
     return (

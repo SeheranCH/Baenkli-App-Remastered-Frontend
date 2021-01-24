@@ -1,34 +1,40 @@
 import React, { Fragment, useState, useEffect } from "react";
-import axios from "axios";
-import Navbar from "../../molecules/navbar/navbar"
-import BottomNavbar from "../../molecules/bottomNavbar/bottomNavbar"
-import PostCard from "../../molecules/card/card"
+import Navbar from "../../molecules/navbar/Navbar"
+import BottomNavbar from "../../molecules/bottomNavbar/BottomNavbar"
+import PostCard from "../../molecules/postCard/PostCard"
 import Grid from '@material-ui/core/Grid';
-
+import BenchService from "../../../service/BenchService";
 
 const HomePage = () => {
 
   const [benches, setBenches] = useState([]);
 
-  function getBenches() {
-    axios.get('http://localhost:8080/benches')
+  function getAllBenches() {
+    BenchService.getAll()
       .then(res => {
         const data = res.data;
         setBenches(data);
+      })
+      .catch(err => {
+        console.error('Error in HomePage.js ', err);
       })
   }
 
   useEffect(() => {
     // Update the document title using the browser API
-    getBenches();
+    getAllBenches();
     // eslint-disable-next-line
   }, []);
 
-  function calRating(ratingArray) {
+  function calcAverage(array, isRating) {
     var total = 0;
     var length = 0;
-    length = ratingArray.length;
-    ratingArray.map(r => total += r.rating);
+    length = array.length;
+    if (isRating) {
+      array.map(r => total += r.rating);
+    } else {
+      array.map(q => total += q.quiet) ;
+    }
 
     let result = total / length;
 
@@ -51,14 +57,17 @@ const HomePage = () => {
               image={randomImg(500, 500, obj.id)}
               title={obj.title}
               description={obj.description}
-              valueQuietness={obj.quiet}
-              valueRating={calRating(obj.ratings)}
+              averageQuiet={obj.quietness}
+              averageRating={calcAverage(obj.ratings, true)}
               amountBenches={obj.amountBenches}
               amountFirePlaces={obj.amountFirePlaces}
               amountTrashCans={obj.amountTrashCans}
               distanceToNextShop={obj.distanceToNextShop}
               directions={obj.directions}
               readOnly={true}
+              avatarTitle={obj.user !== null ? obj.user.username.substring(0, 2).toUpperCase() : null}
+              hasMeadow={obj.hasMeadow}
+              locationOnWater={obj.locationOnWater}
             />
           </Grid>
         ))}
