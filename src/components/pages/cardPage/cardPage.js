@@ -85,7 +85,6 @@ const CardPage = (props) => {
     function postQuiet(dtoObject) {
         axios.post(`http://localhost:8080/quiets`, dtoObject)
             .then(res => {
-                putBenchByQuiet(res.data);
             })
     }
 
@@ -142,22 +141,6 @@ const CardPage = (props) => {
                                 postRating({ rating: value });
                                 setReadOnlyRating(true);
                                 console.log('VALUE RATING ', value)
-                            }}
-                        />
-                        <Typography variant="body2" color="textSecondary" component="h6">
-                            Quiet
-                        </Typography>
-                        <Rating
-                            name="quiet-feedback"
-                            precicion={0.5}
-                            value={valueQuiet}
-                            readOnly={readOnlyQuiet}
-                            onChange={(event, value) => {
-                                setValueQuiet(value);
-                                postQuiet({ quiet: value });
-                                setReadOnlyQuiet(true);
-                                console.log('VALUE Quiet ', value)
-
                             }}
                         />
                     </Grid>
