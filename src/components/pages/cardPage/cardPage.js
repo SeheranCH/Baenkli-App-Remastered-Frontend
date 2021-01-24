@@ -148,7 +148,8 @@ const CardPage = (props) => {
                             readOnly={true}
                             deleteFunction={() => deleteBench(postCardId)}
                             editFunction={() => editBench(postCardId)}
-
+                            hasMeadow={bench.hasMeadow}
+                            locationOnWater={bench.locationOnWater}
                         />
                     </Grid>
                     <Grid item md={4}>

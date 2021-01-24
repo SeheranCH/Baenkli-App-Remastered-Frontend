@@ -66,6 +66,8 @@ const HomePage = () => {
               directions={obj.directions}
               readOnly={true}
               avatarTitle={obj.user !== null ? obj.user.username.substring(0, 2).toUpperCase() : null}
+              hasMeadow={obj.hasMeadow}
+              locationOnWater={obj.locationOnWater}
             />
           </Grid>
         ))}

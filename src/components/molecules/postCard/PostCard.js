@@ -120,6 +120,8 @@ const PostCard = props => {
             readOnly={props.readOnly}
             averageQuiet={props.averageQuiet}
             averageRating={props.averageRating}
+            hasMeadow={props.hasMeadow}
+            locationOnWater={props.locationOnWater}
           />
         </CardContent>
       </Collapse>

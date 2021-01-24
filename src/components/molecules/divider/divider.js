@@ -14,6 +14,8 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import StarRating from '../../atoms/rating/Rating';
 import SpaIcon from '@material-ui/icons/Spa';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,6 +97,30 @@ export default function CardDivider(props) {
         </ListItemAvatar>
         <ListItemText secondary="General rating" />
         <StarRating value={props.averageRating} readOnly={props.readOnly} />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            {props.hasMeadow ?
+              <CheckIcon />
+              : <ClearIcon />}
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText secondary="Has Meadow" />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <Divider variant="inset" component="li" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>
+            {props.locationOnWater ?
+              <CheckIcon />
+              : <ClearIcon />}
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText secondary="Lays on water" />
       </ListItem>
       <Divider variant="inset" component="li" />
     </List>
