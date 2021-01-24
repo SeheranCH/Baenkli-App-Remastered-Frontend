@@ -15,6 +15,7 @@ import Logo from './../../../logo.png'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import PersonIcon from '@material-ui/icons/Person';
 import SessionHandlerContext from '../../other/context/SessionHandlerContext';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,6 +60,10 @@ const Navbar = props => {
     props.history.push(`/account`)
   }
 
+  const goToFavorites = () => {
+    props.history.push(`/favorites`);
+  };
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" className={clsx(classes.root)}>
@@ -99,6 +104,12 @@ const Navbar = props => {
                 title={"Get logged out"}
               >
                 <ExitToAppIcon/>
+              </IconButton>
+              <IconButton
+                onClick={() => goToFavorites()}
+                title={"Favoritelist"}
+              >
+                <FavoriteIcon/>
               </IconButton>
             </div>
           }

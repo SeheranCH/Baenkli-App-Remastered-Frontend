@@ -16,6 +16,7 @@ import SpaIcon from '@material-ui/icons/Spa';
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+import CustomizedRating from '../../atoms/customizedRating/CustomizedRating';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -84,7 +85,7 @@ export default function CardDivider(props) {
           </Avatar>
         </ListItemAvatar>
         <ListItemText secondary="Quiet" />
-        <StarRating value={props.averageQuiet} readOnly={props.readOnly} />
+        <CustomizedRating value={props.averageQuiet} readOnly={props.readOnly}/>
       </ListItem>
       <Divider variant="inset" component="li" />
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -17,6 +17,8 @@ import CardDivider from '../divider/Divider'
 import { withRouter } from "react-router-dom";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = props => {
   const classes = useStyles();
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [favorite, setFavorite] = useState(false);
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -53,6 +56,15 @@ const PostCard = props => {
   const redirectPage = (id) => {
     props.history.push(`/bench/${id}`);
   };
+
+  const handleFavorite = () => {
+    if(favorite){
+      setFavorite(false)
+    } else {
+      setFavorite(true)
+    }    
+  };
+
   
 
   function getDate() {
@@ -88,6 +100,13 @@ const PostCard = props => {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
+      <IconButton aria-label="add to favorites" onClick={()=>handleFavorite()}>
+         {favorite ? 
+         <FavoriteIcon />
+        :
+        <FavoriteBorderIcon />
+        } 
+        </IconButton>
         {props.editButton ?
           <IconButton aria-label="edit" onClick={props.editFunction}>
             <EditIcon color="primary" />

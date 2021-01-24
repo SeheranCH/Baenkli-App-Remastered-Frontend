@@ -57,7 +57,7 @@ const HomePage = () => {
               image={randomImg(500, 500, obj.id)}
               title={obj.title}
               description={obj.description}
-              averageQuiet={calcAverage(obj.quiets, false)}
+              averageQuiet={obj.quietness}
               averageRating={calcAverage(obj.ratings, true)}
               amountBenches={obj.amountBenches}
               amountFirePlaces={obj.amountFirePlaces}

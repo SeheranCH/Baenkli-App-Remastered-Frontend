@@ -7,6 +7,7 @@ import MapsPage from "../../pages/mapsPage/MapsPage";
 import RegisterPage from "../../pages/registerPage/RegisterPage";
 import NewBenchPage from "../../pages/newBenchPage/NewBenchPage";
 import AccountPage from "../../pages/accountPage/AccountPage";
+import FavoritePage from "../../pages/favoritePage/FavoritePage";
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
       <Route exact path="/signup" component={RegisterPage}/>
       <Route exact path="/create" component={NewBenchPage} />
       <Route exact path="/account" component={AccountPage} />
+      <Route exact path="/favorites" component={FavoritePage} />
     </Switch>
   );
 };
