@@ -70,17 +70,6 @@ const PersonalBenchManagment = ({ benches, benchHandler }) => {
         setOpenEdit(!openEdit);
     }
 
-    const checkFormat = (nAsString) => {
-        var n = parseFloat(nAsString);
-        if (n % 1 === 0) {
-            return n + ".-"
-        } else if (n * 10 % 1 === 0) {
-            return n + "0";
-        } else {
-            return nAsString;
-        }
-    }
-
     const goToBench = (id) => {
         history.push(`/bench/${id}`);
     }
@@ -189,3 +178,5 @@ const PersonalBenchManagment = ({ benches, benchHandler }) => {
     );
 }
 export default PersonalBenchManagment;
+
+ 

@@ -283,7 +283,7 @@ const AccountPage = () => {
 
     const { user } = useContext(SessionHandlerContext);
 
-    const [navigation, setNavigation] = useState("userManagment");
+    const [navigation, setNavigation] = useState("personalData");
 
     const [ownBenches, setOwnBenches] = useState([]);
 

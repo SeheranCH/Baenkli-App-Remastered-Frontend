@@ -35,10 +35,12 @@ const OwnDialog = ({ isOpen, handler, action, mode, titleDialog, bench, user }) 
                         : null}
                 </DialogContent>
                 <DialogActions>
-                    <OwnButton
-                        onClickFunc={handler}
-                        typeOfButton={'cancel'}
-                    />
+                    {mode !== 'editBench' && mode !== 'editUser' ?
+                        <OwnButton
+                            onClickFunc={handler}
+                            typeOfButton={'cancel'}
+                        />
+                        : null}
                     {mode === 'delete' ?
                         <OwnButton
                             onClickFunc={action}
