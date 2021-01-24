@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 import Navbar from "../../molecules/navbar/Navbar"
 import BottomNavbar from "../../molecules/bottomNavbar/BottomNavbar"
-import PostCard from "../../molecules/card/Card"
+import PostCard from "../../molecules/postCard/PostCard";
 import Grid from '@material-ui/core/Grid';
 import BenchService from "../../../service/BenchService";
 
