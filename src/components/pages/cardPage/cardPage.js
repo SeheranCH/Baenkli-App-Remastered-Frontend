@@ -133,7 +133,6 @@ const CardPage = (props) => {
                         <CardForm bench={postCardId === 'new' ? { ...bench, id: 'new' } : bench} setBench={postCardId === 'new' ? () => { } : setBench} />
                     </Grid>
                 </Grid>
-
                 :
                 <Grid
                     container

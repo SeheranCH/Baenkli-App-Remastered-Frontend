@@ -4,7 +4,7 @@ import UserForm from "../../organisms/userForm/UserForm";
 import { makeStyles, Grid } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-    root: {
+    root: { 
         marginTop: "10%",
     },
 }));

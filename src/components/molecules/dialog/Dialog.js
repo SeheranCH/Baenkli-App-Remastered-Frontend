@@ -1,36 +1,11 @@
 import React, { useContext, useState } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, DialogContentText, FormControl, FilledInput, InputAdornment } from '@material-ui/core';
 import OwnButton from "../../atoms/ownButton/OwnButton";
-// import InputNumber from "../../atoms/InputNumber/InputNumber";
-// import ArticleForm from "../../organisms/ArticleForm/ArticleForm";
-// // import SessionHandlerContext from "../../other/Context/SessionHandlerContext";
-// import OrderService from "../../../service/OrderService";
+import CardForm from "../../organisms/cardForm/CardForm";
+import UserForm from "../../organisms/userForm/UserForm";
 
 
-const DialogComp = ({ isOpen, handler, article, mode, titleDialog }) => {
-
-
-    // const { personalShoppingCart } = useContext(SessionHandlerContext);
-
-    const [amount, setAmount] = useState(1);
-
-    const addArticleToShoppingCart = (a, s) => {
-        // const dto = {article: a, quantity: amount, order: s};
-        // OrderService.createOrderDetail(dto)
-        //     .then(() => {
-        //     })
-        //     .catch(err => {
-        //         console.error('Error in DialogComp');
-        //     })
-        //     .finally(() => {
-        //         handler();
-        //     })
-
-    }
-
-    const handleAmount = (e) => {
-        setAmount(e.target.value);
-    }
+const OwnDialog = ({ isOpen, handler, action, mode, titleDialog, bench, user }) => {
 
     return (
         <div>
@@ -38,43 +13,38 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog }) => {
                 open={isOpen}
                 onClose={handler}
                 aria-labelledby="form-dialog-title"
+                style={null}
             >
                 <DialogTitle id="form-dialog-title">
-                    {mode === 'inputNumber' ?
-                        "To shopping cart"
-                        : null}
-                    {mode === 'removeArticle' || mode === 'editArticle' || mode === 'createArticle' ?
-                        titleDialog
-                        : null}
+                    {titleDialog}
                 </DialogTitle>
                 <DialogContent>
-                    {mode === 'editArticle' ?
-                    // HERE: BenchForm
-                        {/* <ArticleForm
-                            article={article}
-                            mode={'edit'}
-                            handleDialog={handler}
-                        /> */}
+                    {mode === 'editBench' ?
+                        <CardForm
+                            updateFunc={action}
+                            bench={bench}
+                            modeDialog
+                        />
                         : null}
-                    {mode === 'createArticle' ?
-                        {/* <ArticleForm
-                            article={article}
-                            mode={'create'}
-                            handleDialog={handler}
-                        /> */}
+                    {mode === 'editUser' ?
+                        <UserForm
+                            initialObject={user}
+                            updateFunc={action}
+                            modeDialog
+                        />
                         : null}
                 </DialogContent>
                 <DialogActions>
-                    {mode !== 'editArticle' && mode !== 'createArticle' ?
+                    {mode !== 'editBench' && mode !== 'editUser' ?
                         <OwnButton
                             onClickFunc={handler}
                             typeOfButton={'cancel'}
                         />
                         : null}
-                    {mode !== 'editArticle' && mode !== 'createArticle' ?
+                    {mode === 'delete' ?
                         <OwnButton
-                            onClickFunc={() => addArticleToShoppingCart(article, null)}
-                            typeOfButton={'submit'}
+                            onClickFunc={action}
+                            typeOfButton={'confirm'}
                         />
                         : null}
                 </DialogActions>
@@ -83,4 +53,4 @@ const DialogComp = ({ isOpen, handler, article, mode, titleDialog }) => {
     );
 };
 
-export default DialogComp;
+export default OwnDialog;

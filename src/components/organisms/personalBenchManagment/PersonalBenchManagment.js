@@ -14,11 +14,13 @@ import FolderIcon from '@material-ui/icons/Folder';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShopIcon from '@material-ui/icons/Shop';
 import EditIcon from '@material-ui/icons/Edit';
-import Dialog from "../../molecules/dialog/Dialog";
+import OwnDialog from "../../molecules/dialog/Dialog";
 import { useHistory } from 'react-router-dom';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
-// import ArticleService from '../../../service/ArticleService';
-// import SessionHandlerContext from '../../other/Context/SessionHandlerContext';
+import BenchService from '../../../service/BenchService';
+import Title from "../../atoms/title/Title";
+import WeekendIcon from '@material-ui/icons/Weekend';
+
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -27,178 +29,154 @@ const useStyles = makeStyles(() => ({
     },
     title: {
     },
+    // paper: {
+    //     margin: "20px",
+    //     paddingTop: "20px",
+    //     width: "100%"
+    // },
     paper: {
-        margin: "20px",
-        paddingTop: "20px",
-        width: "100%"
+        flexGrow: 1,
+        paddingTop: "50px",
+        paddingBottom: "50px",
+        background: "#e6f3d8",
+        color: "black",
     },
-    removeButton: {
+    deleteButton: {
         color: "red",
     },
-    button: {
-        color: "#C6E2FA",
+    editButton: {
+        color: "#355A20",
     },
 }));
 
-const initialArticle = {
-    articleName: "",
-    articleDescription: "",
-    brand: "",
-    available: true,
-    price: null,
-    salePrice: null
-};
 
-const PersonalBenchManagment = ({ articles }) => {
+const PersonalBenchManagment = ({ benches, benchHandler }) => {
 
-    // const { getAllArticles } = useContext(SessionHandlerContext);
-
-    const [openRemove, setOpenRemove] = useState(false);
-    const [articleToRemove, setArticleToRemove] = useState({});
+    const [openDelete, setOpenDelete] = useState(false);
+    const [benchToDelete, setBenchToDelete] = useState({});
 
     const [openEdit, setOpenEdit] = useState(false);
-    const [articleToEdit, setArticleToEdit] = useState({});
-
-    const [openCreate, setOpenCreate] = useState(false);
+    const [benchToEdit, setBenchToEdit] = useState({});
 
     const history = useHistory();
 
     const classes = useStyles();
 
-    const dialogHandlerRemove = () => {
-        setOpenRemove(!openRemove);
+    const dialogHandlerDelete = () => {
+        setOpenDelete(!openDelete);
     }
 
     const dialogHandlerEdit = () => {
         setOpenEdit(!openEdit);
     }
 
-    const dialogHandlerCreate = () => {
-        setOpenCreate(!openCreate);
+    const goToBench = (id) => {
+        history.push(`/bench/${id}`);
     }
 
-    const checkFormat = (nAsString) => {
-        var n = parseFloat(nAsString);
-        if (n % 1 === 0) {
-            return n + ".-"
-        } else if (n * 10 % 1 === 0) {
-            return n + "0";
-        } else {
-            return nAsString;
+    const getInformation = (b) => {
+        var info = "Bench id: " + b.id;
+        if (b.longitude !== null && b.latitude !== null) {
+            info += " | Coordinates: " + b.longitude + " / " + b.latitude;
         }
-    }
-
-    const goToArticle = (id) => {
-        history.push(`/articles/${id}`);
-    }
-
-    const getOtherInformation = (a) => {
-        var stringMoreInformation = " | Article id: " + a.id + " | Brand: " + a.brand + " | ";
-        if (a.available) {
-            stringMoreInformation += "Now available";
-        } else {
-            stringMoreInformation += "Currently not available";
+        if (b.address !== null) {
+            info += " | Location: " + b.address.street + ", " + b.address.zip + " " + b.address.place;
         }
-        return stringMoreInformation;
+        return info;
     }
 
-    const removeArticle = () => {
-        // ArticleService.delete(articleToRemove.id)
-        //     .then(() => {
-        //     })
-        //     .catch(err => {
-        //         console.error('Error in PersonalBenchManagment: ', err);
-        //     })
-        //     .finally(() => {
-        //         dialogHandlerRemove();
-        //         // getAllArticles();
-        //     })
+    const deleteBench = () => {
+        BenchService.delete(benchToDelete.id)
+            .then(() => {
+                benchHandler(benches.filter(b => b.id !== benchToDelete.id))
+            })
+            .catch(err => {
+                console.error('Error in PersonalBenchManagment: ', err);
+            })
+            .finally(() => {
+                dialogHandlerDelete();
+            })
+    }
+
+    const changeBench = (dto) => {
+        BenchService.update(dto.id, dto)
+            .then(res => {
+                let benchArray = benches.filter(b => b.id !== benchToEdit.id);
+                benchArray.push(res.data);
+                benchHandler(benchArray);
+            })
+            .catch(err => {
+                console.error('Error in PersonalBenchManagment: ', err)
+            })
+            .finally(() => {
+                dialogHandlerEdit();
+            })
     }
 
     return (
-        <Grid container>
-            <Paper className={classes.paper}>
-                <Typography align={"center"} variant="h6" className={classes.title}>
-                    <i>My articles</i>
-                    <Typography align={"right"}>
-                            <IconButton
-                                onClick={() => {
-                                    dialogHandlerCreate();
-                                }}
-                                title={"Add new article"}
-                                className={classes.button}
-                            >
-                                <AddCircleIcon />
-                            </IconButton>
-                    </Typography>
-                </Typography>
-                <div className={classes.demo}>
-                    <List>
-                        {articles.map((a) =>
-                            <ListItem key={a.id} onClick={() => goToArticle(a.id)} title={"Go to article " + a.articleName}>
-                                <ListItemAvatar>
-                                    <Avatar>
-                                        <ShopIcon />
-                                    </Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary={a.articleName}
-                                    secondary={a.salePrice !== 0 ? "Current sale price: Fr. " + checkFormat(a.salePrice) + getOtherInformation(a) : "Current price: Fr. " + checkFormat(a.price) + getOtherInformation(a)}
-                                />
-                                <ListItemSecondaryAction>
-                                    <IconButton
-                                        title={"Edit article " + a.articleName}
-                                        onClick={() => {
-                                            setArticleToEdit(a);
-                                            dialogHandlerEdit();
-                                        }}
-                                        edge="end"
-                                        aria-label="edit"
-                                        className={classes.button}
-                                    >
-                                        <EditIcon />
-                                    </IconButton>
-                                    <IconButton
-                                        title={"Remove article " + a.articleName}
-                                        onClick={() => {
-                                            setArticleToRemove(a);
-                                            dialogHandlerRemove();
-                                        }}
-                                        edge="end"
-                                        aria-label="delete"
-                                        className={classes.removeButton}
-                                    >
-                                        <DeleteIcon />
-                                    </IconButton>
-                                </ListItemSecondaryAction>
-                            </ListItem>,
-                        )}
-                    </List>
-                </div>
-            </Paper>
-            <Dialog
-                isOpen={openRemove}
-                handler={dialogHandlerRemove}
-                mode={'removeArticle'}
-                titleDialog={"Remove article " + articleToRemove.articleName + "?"}
-                confirmAction={() => removeArticle()}
+        <Paper className={classes.paper}>
+            <div className={classes.demo}>
+                <List>
+                    {benches.map((b) =>
+                        <ListItem key={b.id} onClick={() => goToBench(b.id)} title={"Go to bench " + b.title}>
+                            <ListItemAvatar>
+                                <Avatar>
+                                    <WeekendIcon />
+                                </Avatar>
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={b.title}
+                                secondary={getInformation(b)}
+                            />
+                            <ListItemSecondaryAction>
+                                <IconButton
+                                    title={"Edit bench " + b.title}
+                                    onClick={() => {
+                                        setBenchToEdit(b);
+                                        dialogHandlerEdit();
+                                    }}
+                                    edge="end"
+                                    aria-label="edit"
+                                    className={classes.editButton}
+                                >
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton
+                                    title={"Delete bench " + b.title}
+                                    onClick={() => {
+                                        setBenchToDelete(b);
+                                        dialogHandlerDelete();
+                                    }}
+                                    edge="end"
+                                    aria-label="delete"
+                                    className={classes.deleteButton}
+                                >
+                                    <DeleteIcon />
+                                </IconButton>
+                            </ListItemSecondaryAction>
+                        </ListItem>,
+                    )}
+                </List>
+            </div>
+            <OwnDialog
+                isOpen={openDelete}
+                handler={dialogHandlerDelete}
+                mode={'delete'}
+                titleDialog={"Delete bench '" + benchToDelete.title + "'?"}
+                action={() => deleteBench()}
             />
-            <Dialog
+            <OwnDialog
                 isOpen={openEdit}
                 handler={dialogHandlerEdit}
-                mode={'editArticle'}
-                titleDialog={"Edit your article  " + articleToEdit.articleName}
-                article={articleToEdit}
+                mode={'editBench'}
+                titleDialog={"Edit bench '"+ benchToEdit.title + "'"}
+                action={changeBench}
+                bench={benchToEdit}
             />
-            <Dialog
-                isOpen={openCreate}
-                handler={dialogHandlerCreate}
-                mode={'createArticle'}
-                titleDialog={"Create an article"}
-                article={initialArticle}
-            />
-        </Grid>
+        </Paper>
 
     );
 }
 export default PersonalBenchManagment;
+
+ 
