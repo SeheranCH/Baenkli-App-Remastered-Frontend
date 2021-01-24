@@ -10,6 +10,9 @@ const BenchService = {
     getById: (id) => {
         return api.get(`/benches/${id}`);
     },
+    getAllFavorites: (userId) => {
+        return api.get(`/benches/favorites/${userId}`);
+    },
     getAll: () => {
         return api.get(`/benches`);
     },

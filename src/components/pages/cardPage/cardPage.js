@@ -82,7 +82,7 @@ const CardPage = (props) => {
         // })
     }
 
-        function postComment(dto) {
+    function postComment(dto) {
         CommentService.create(dto)
             .then((res) => {
                 console.log(res.data)
@@ -92,7 +92,7 @@ const CardPage = (props) => {
                 console.log(err)
             })
         // .finally(() => {
-    
+
         // })
     }
 
@@ -135,10 +135,12 @@ const CardPage = (props) => {
                 </Grid>
 
                 :
-                <Grid container
-                    direction="column"
+                <Grid
+                    container
+                    direction="row"
                     justify="center"
-                    alignItems="center">
+                    alignItems="align-star"
+                >
                     <Grid item >
                         <PostCard
                             id={postCardId}
@@ -159,23 +161,6 @@ const CardPage = (props) => {
 
                         />
                     </Grid>
-                    {/* <Grid item >
-                        <Typography variant="body2" color="textSecondary" component="h6">
-                            Rate
-                            </Typography>
-                        <Rating
-                            name="rating-feedback"
-                            precicion={0.5}
-                            value={valueRating}
-                            readOnly={readOnlyRating}
-                            onChange={(event, value) => {
-                                setValueRating(value);
-                                postRating({ rating: value });
-                                setReadOnlyRating(true);
-                            }}
-                        />
-                    </Grid> */}
-
                     <Grid item >
                         <CommentModal
                             usernameCurrentUser={user.username}
@@ -189,7 +174,7 @@ const CardPage = (props) => {
                             setReadOnlyRating={setReadOnlyRating}
                             bench={bench}
                             postComment={postComment}
-                            />
+                        />
                     </Grid>
                 </Grid>
             }

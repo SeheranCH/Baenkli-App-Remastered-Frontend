@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useContext, useState } from 'react';
 import { withRouter } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -25,33 +25,17 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         maxWidth: '36ch',
     },
-    // avatar: {
-    //     margin: theme.spacing(1),
-    // },
 }));
 
-const CommentField = ({username, firstName, lastName, bench, postComment}) => {
-
-    // function postComment(dto) {
-    //     CommentService.create(dto)
-    //         .then((res) => {
-    //             console.log(res.data)
-    //         })
-    //         .catch((err) => {
-    //             console.log(err)
-    //         })
-    //     // .finally(() => {
-    
-    //     // })
-    // }
+const CommentField = ({ username, firstName, lastName, bench, postComment }) => {
 
     const classes = useStyles();
-    const [value, setValue] = React.useState('Controlled');
+    const [value, setValue] = useState(null);
     const { user } = useContext(SessionHandlerContext);
 
     const commentDTO = {
         commentText: value,
-        bench: bench, 
+        bench: bench,
         user: user
     }
 
@@ -105,7 +89,7 @@ const CommentField = ({username, firstName, lastName, bench, postComment}) => {
                     color="default"
                     className={classes.button}
                     startIcon={<SendIcon />}
-                    onClick={()=>{
+                    onClick={() => {
                         postComment(commentDTO);
                         setValue("");
                     }}

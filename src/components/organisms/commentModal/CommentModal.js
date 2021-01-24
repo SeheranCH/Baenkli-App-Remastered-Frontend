@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
         display: 'inline',
     },
     paper: {
-        margin: theme.spacing(2),
+        maxWidth: 345,
+        margin: "50px",
     },
     title: {
         margin: theme.spacing(2),
@@ -45,7 +46,7 @@ const CommentModal = ({ comments, usernameCurrentUser, firstNameCurrentUser, las
                 justify="center"
                 alignItems="flex-start"
             >
-                <Grid item className={classes.paper}>
+                <Grid item className={classes.title}>
                     <Typography variant="body2" color="textSecondary" component="h6">
                         Rate this bench
                         </Typography>
