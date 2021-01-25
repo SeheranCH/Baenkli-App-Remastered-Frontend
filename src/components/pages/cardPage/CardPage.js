@@ -6,8 +6,6 @@ import PostCard from "../../molecules/postCard/PostCard";
 import CommentModal from "../../organisms/commentModal/CommentModal";
 import CardForm from "../../organisms/cardForm/CardForm";
 import Grid from '@material-ui/core/Grid';
-import Rating from "../../atoms/rating/Rating";
-import Typography from '@material-ui/core/Typography';
 import SessionHandlerContext from '../../other/context/SessionHandlerContext';
 import CommentService from "../../../service/CommentService";
 
@@ -25,31 +23,18 @@ const CardPage = (props) => {
 
     const postCardId = props.match.params.id;
     const [editing, setEditing] = useState(false);
-    const [bench, setBench] = useState([]);
+    const [bench, setBench] = useState({});
     const [comments, setComments] = useState([]);
     const [readOnlyRating, setReadOnlyRating] = useState(false);
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        getOneBench(postCardId);
+    }, []);
 
     function randomImg(width, height, key) {
         var source = 'https://source.unsplash.com/random/' + width + 'x' + height + '/?bench,park' + key;
         return source;
-    }
-
-    function calRating(ratingArray) {
-        if (ratingArray === undefined) {
-            return 0;
-        } else {
-            console.log(bench.ratings)
-            var total = 0;
-            var length = 0;
-            console.log("rating,", ratingArray)
-            length = ratingArray.length;
-            ratingArray.map(r => total += r.rating);
-
-            let result = total / length;
-
-            return Math.round(result * 2) / 2;
-        }
-
     }
 
     function getOneBench(id) {
@@ -77,9 +62,6 @@ const CardPage = (props) => {
             .catch((err) => {
                 console.log(err)
             })
-        // .finally(() => {
-
-        // })
     }
 
     function postComment(dto) {
@@ -91,9 +73,6 @@ const CardPage = (props) => {
             .catch((err) => {
                 console.log(err)
             })
-        // .finally(() => {
-
-        // })
     }
 
     function editBench() {
@@ -103,7 +82,7 @@ const CardPage = (props) => {
     // eslint-disable-next-line
     useEffect(() => {
         // Update the document title using the browser API
-        getOneBench(postCardId);
+        // getOneBench(postCardId);
         getComments(postCardId);
     }, []);
 
@@ -115,7 +94,6 @@ const CardPage = (props) => {
                 putBenchByRating(res.data);
             })
     }
-
 
     function putBenchByRating(dtoRating) {
         axios.put(`http://localhost:8080/benches/${bench.id}/rating/${dtoRating.id}`, bench)
@@ -142,23 +120,17 @@ const CardPage = (props) => {
                 >
                     <Grid item >
                         <PostCard
-                            id={postCardId}
-                            image={randomImg(500, 500, postCardId)}
-                            deleteButton={true}
-                            editButton={true}
-                            title={bench.title}
-                            averageQuiet={bench.quietness}
-                            averageRating={calRating(bench.ratings)}
-                            amountBenches={bench.amountBenches}
-                            amountFirePlaces={bench.amountFirePlaces}
-                            amountTrashCans={bench.amountTrashCans}
-                            distanceToNextShop={bench.distanceToNextShop}
-                            directions={bench.directions}
                             readOnly={true}
+                            bench={bench}
+                            benchId={postCardId}
+                            image={randomImg(500, 500, postCardId)}
                             deleteFunction={() => deleteBench(postCardId)}
                             editFunction={() => editBench(postCardId)}
+<<<<<<< HEAD:src/components/pages/cardPage/CardPage.js
                             hasMeadow={bench.hasMeadow}
                             locationOnWater={bench.locationOnWater}
+=======
+>>>>>>> feature_sabrina:src/components/pages/cardPage/CardPage.js
                         />
                     </Grid>
                     <Grid item >

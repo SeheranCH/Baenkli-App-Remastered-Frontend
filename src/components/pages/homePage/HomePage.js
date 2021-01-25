@@ -1,11 +1,15 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, useContext } from "react";
+import SessionHandlerContext from '../../other/context/SessionHandlerContext';
 import Navbar from "../../molecules/navbar/Navbar"
 import BottomNavbar from "../../molecules/bottomNavbar/BottomNavbar"
 import PostCard from "../../molecules/postCard/PostCard"
 import Grid from '@material-ui/core/Grid';
 import BenchService from "../../../service/BenchService";
+import UserService from "../../../service/UserService";
 
 const HomePage = () => {
+
+  const { user } = useContext(SessionHandlerContext);
 
   const [benches, setBenches] = useState([]);
 
@@ -26,21 +30,6 @@ const HomePage = () => {
     // eslint-disable-next-line
   }, []);
 
-  function calcAverage(array, isRating) {
-    var total = 0;
-    var length = 0;
-    length = array.length;
-    if (isRating) {
-      array.map(r => total += r.rating);
-    } else {
-      array.map(q => total += q.quiet) ;
-    }
-
-    let result = total / length;
-
-    return Math.round(result * 2) / 2;
-  }
-
   function randomImg(width, height, key) {
     var source = 'https://source.unsplash.com/random/' + width + 'x' + height + '/?bench,park' + key;
     return source;
@@ -53,18 +42,9 @@ const HomePage = () => {
         {benches.map((obj, i) => (
           <Grid item xs={4} key={i}>
             <PostCard
-              id={obj.id}
-              image={randomImg(500, 500, obj.id)}
-              title={obj.title}
-              description={obj.description}
-              averageQuiet={obj.quietness}
-              averageRating={calcAverage(obj.ratings, true)}
-              amountBenches={obj.amountBenches}
-              amountFirePlaces={obj.amountFirePlaces}
-              amountTrashCans={obj.amountTrashCans}
-              distanceToNextShop={obj.distanceToNextShop}
-              directions={obj.directions}
               readOnly={true}
+              bench={obj}
+              image={randomImg(500, 500, obj.id)}
               avatarTitle={obj.user !== null ? obj.user.username.substring(0, 2).toUpperCase() : null}
               hasMeadow={obj.hasMeadow}
               locationOnWater={obj.locationOnWater}
