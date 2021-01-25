@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -44,9 +44,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostCard = props => {
+const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
+  editButton, editFunction, deleteButton, deleteFunction, ...props }) => {
+
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false);  
   const [favorite, setFavorite] = useState(false);
 
   const handleExpandClick = () => {
@@ -58,62 +60,89 @@ const PostCard = props => {
   };
 
   const handleFavorite = () => {
-    if(favorite){
+    if (favorite) {
       setFavorite(false)
+      //removeBenchToUserFavoriteList
     } else {
       setFavorite(true)
-    }    
-  };
+      //addBenchToUserFavoriteList
 
-  
+    }
+  };
 
   function getDate() {
     var d = new Date();
     var n = d.toString();
     return n;
-  }  
+  }
+
+  function calRating(ratingArray) {
+    if (ratingArray === undefined) {
+        return 0;
+    } else {
+        var total = 0;
+        var length = 0;
+        length = ratingArray.length;
+        ratingArray.map(r => total += r.rating);
+
+        let result = total / length;
+
+        return Math.round(result * 2) / 2;
+    }
+  }
+
+  function addBenchToUserFavoriteList(benchId, dto) {
+    // UserService.addBenchToFavorites(user.id, benchId, dto)
+    //   .then(res => {
+    //     const data = res.data;
+    //     //setBenches(data);
+    //   })
+    //   .catch(err => {
+    //     console.error('Error in HomePage.js ', err);
+    //   })
+  }
 
   return (
     <Card className={classes.root}>
       <CardHeader
         avatar={
           <Avatar className={classes.avatar}>
-            {props.avatarTitle}
+            {avatarTitle}
           </Avatar>
         }
         action={
-          <IconButton aria-label="settings" onClick={() => redirectPage(props.id)}>
+          <IconButton aria-label="settings" onClick={() => redirectPage(bench.id)}>
             <VisibilityIcon />
           </IconButton>
         }
-        title={props.title}
+        title={bench.title}
         subheader={getDate()}
       />
       <CardMedia
         className={classes.media}
-        image={props.image}
-        title={props.title}
+        image={image}
+        title={bench.title}
       />
       <CardContent>
         <Typography variant="body2" color="textSecondary" component="p">
-          {props.description}
+          {bench.description}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-      <IconButton aria-label="add to favorites" onClick={()=>handleFavorite()}>
-         {favorite ? 
-         <FavoriteIcon />
-        :
-        <FavoriteBorderIcon />
-        } 
+        <IconButton aria-label="add to favorites" onClick={() => handleFavorite()}>
+          {favorite ?
+            <FavoriteIcon />
+            :
+            <FavoriteBorderIcon />
+          }
         </IconButton>
-        {props.editButton ?
-          <IconButton aria-label="edit" onClick={props.editFunction}>
+        {editButton ?
+          <IconButton aria-label="edit" onClick={editFunction}>
             <EditIcon color="primary" />
           </IconButton>
           : null}
-        {props.deleteButton ?
-          <IconButton aria-label="delete" onClick={props.deleteFunction}>
+        {deleteButton ?
+          <IconButton aria-label="delete" onClick={deleteFunction}>
             <DeleteIcon color="error" />
           </IconButton>
           : null}
@@ -131,14 +160,15 @@ const PostCard = props => {
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <CardDivider
-            amountBenches={props.amountBenches}
-            amountFirePlaces={props.amountFirePlaces}
-            amountTrashCans={props.amountTrashCans}
-            distanceToNextShop={props.distanceToNextShop}
-            directions={props.directions}
-            readOnly={props.readOnly}
-            averageQuiet={props.averageQuiet}
-            averageRating={props.averageRating}
+            amountBenches={bench.amountBenches}
+            amountFirePlaces={bench.amountFirePlaces}
+            amountTrashCans={bench.amountTrashCans}
+            distanceToNextShop={bench.distanceToNextShop}
+            directions={bench.directions}
+            readOnly={true}
+            averageQuiet={bench.averageQuiet}
+            averageRating={calRating(bench.ratings)}
+            //averageRating={props.averageRating}
           />
         </CardContent>
       </Collapse>

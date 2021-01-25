@@ -10,6 +10,9 @@ const UserService = {
     update: (id, dto) => {
         return api.put(`/users/${id}`, dto);
     },
+    addBenchToFavorites: (userId, benchId, dto) => {
+        return api.put(`/users/${userId}/favorites/benches/${benchId}`, dto);
+    },
     getById: (id) => {
         return api.get(`/users/${id}`);
     },

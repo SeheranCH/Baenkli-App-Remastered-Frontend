@@ -11,7 +11,7 @@ const BenchService = {
         return api.get(`/benches/${id}`);
     },
     getAllFavorites: (userId) => {
-        return api.get(`/benches/favorites/${userId}`);
+        return api.get(`/benches/favorites/user/${userId}`);
     },
     getOwnBenches: (userId) => {
         return api.get(`/benches/users/${userId}`);
