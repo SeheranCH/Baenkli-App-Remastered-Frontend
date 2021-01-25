@@ -23,9 +23,14 @@ const CardPage = (props) => {
 
     const postCardId = props.match.params.id;
     const [editing, setEditing] = useState(false);
-    const [bench, setBench] = useState([]);
+    const [bench, setBench] = useState({});
     const [comments, setComments] = useState([]);
     const [readOnlyRating, setReadOnlyRating] = useState(false);
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        getOneBench(postCardId);
+    }, []);
 
     function randomImg(width, height, key) {
         var source = 'https://source.unsplash.com/random/' + width + 'x' + height + '/?bench,park' + key;
@@ -76,9 +81,9 @@ const CardPage = (props) => {
 
     // eslint-disable-next-line
     useEffect(() => {
-    // Update the document title using the browser API
-    getOneBench(postCardId);
-    getComments(postCardId);
+        // Update the document title using the browser API
+        // getOneBench(postCardId);
+        getComments(postCardId);
     }, []);
 
     const [valueRating, setValueRating] = useState({});
@@ -89,7 +94,7 @@ const CardPage = (props) => {
                 putBenchByRating(res.data);
             })
     }
-    
+
     function putBenchByRating(dtoRating) {
         axios.put(`http://localhost:8080/benches/${bench.id}/rating/${dtoRating.id}`, bench)
             .then(res => {
@@ -116,9 +121,8 @@ const CardPage = (props) => {
                     <Grid item >
                         <PostCard
                             readOnly={true}
-                            //handleFavorite={handleFavorite}
-                            //favorite={favorite}
                             bench={bench}
+                            benchId={postCardId}
                             image={randomImg(500, 500, postCardId)}
                             deleteFunction={() => deleteBench(postCardId)}
                             editFunction={() => editBench(postCardId)}

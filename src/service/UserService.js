@@ -11,7 +11,11 @@ const UserService = {
         return api.put(`/users/${id}`, dto);
     },
     addBenchToFavorites: (userId, benchId, dto) => {
-        return api.put(`/users/${userId}/favorites/benches/${benchId}`, dto);
+        return api.put(`/users/${userId}/add/favorites/benches/${benchId}`, dto);
+    },
+    // TODO
+    removeBenchFromFavorites: (userId, benchId, dto) => {
+        return api.put(`/users/${userId}/remove/favorites/benches/${benchId}`, dto);
     },
     getById: (id) => {
         return api.get(`/users/${id}`);

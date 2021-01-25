@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
@@ -19,6 +19,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
+import SessionHandlerContext from '../../other/context/SessionHandlerContext';
+import UserService from '../../../service/UserService';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -44,12 +47,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
+
+
+
+const PostCard = ({ bench, benchId, image, avatarTitle,
   editButton, editFunction, deleteButton, deleteFunction, ...props }) => {
 
+  const { user, setActiveUser } = useContext(SessionHandlerContext);
+
   const classes = useStyles();
-  const [expanded, setExpanded] = useState(false);  
-  const [favorite, setFavorite] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(user.favoriteBenches.some(b => b.id === bench.id || b.id === benchId));
+
+  console.log("das ish problem, ", isFavorite)
+  const handleFavorite = (item) => {
+    if (!isFavorite) {
+      let currentFavorites = user.favoriteBenches;
+      currentFavorites.push(item);
+      let userDto = { ...user, favoriteBenches: currentFavorites }
+      addFavorite(item.id, userDto);
+    } else {
+      let oldFavorites = user.favoriteBenches.filter(b => b.id !== item.id)
+      let userDto = { ...user, favoriteBenches: oldFavorites }
+      removeFavorite(item.id, userDto);
+    }
+    setIsFavorite(!isFavorite);
+  }
+
+  function addFavorite(benchId, dto) {
+    UserService.addBenchToFavorites(user.id, benchId, dto)
+      .then(res => {
+        setActiveUser(res.data);
+      })
+      .catch(err => {
+        console.error('Error in PostCard.js ', err);
+      })
+  }
+
+  function removeFavorite(benchId, dto) {
+    UserService.removeBenchFromFavorites(user.id, benchId, dto)
+      .then(res => {
+        setActiveUser(res.data);
+      })
+      .catch(err => {
+        console.error('Error in PostCard.js ', err);
+      })
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -57,17 +100,6 @@ const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
 
   const redirectPage = (id) => {
     props.history.push(`/bench/${id}`);
-  };
-
-  const handleFavorite = () => {
-    if (favorite) {
-      setFavorite(false)
-      //removeBenchToUserFavoriteList
-    } else {
-      setFavorite(true)
-      //addBenchToUserFavoriteList
-
-    }
   };
 
   function getDate() {
@@ -78,28 +110,17 @@ const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
 
   function calRating(ratingArray) {
     if (ratingArray === undefined) {
-        return 0;
+      return 0;
     } else {
-        var total = 0;
-        var length = 0;
-        length = ratingArray.length;
-        ratingArray.map(r => total += r.rating);
+      var total = 0;
+      var length = 0;
+      length = ratingArray.length;
+      ratingArray.map(r => total += r.rating);
 
-        let result = total / length;
+      let result = total / length;
 
-        return Math.round(result * 2) / 2;
+      return Math.round(result * 2) / 2;
     }
-  }
-
-  function addBenchToUserFavoriteList(benchId, dto) {
-    // UserService.addBenchToFavorites(user.id, benchId, dto)
-    //   .then(res => {
-    //     const data = res.data;
-    //     //setBenches(data);
-    //   })
-    //   .catch(err => {
-    //     console.error('Error in HomePage.js ', err);
-    //   })
   }
 
   return (
@@ -129,8 +150,13 @@ const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites" onClick={() => handleFavorite()}>
-          {favorite ?
+        <IconButton aria-label="add to favorites"
+          onClick={() => {
+            handleFavorite(bench);
+            // handleFavorite(bench);
+          }
+          }>
+          {isFavorite ?
             <FavoriteIcon />
             :
             <FavoriteBorderIcon />
@@ -168,7 +194,7 @@ const PostCard = ({ bench, image, avatarTitle, favoritesState, setFavorites,
             readOnly={true}
             averageQuiet={bench.averageQuiet}
             averageRating={calRating(bench.ratings)}
-            //averageRating={props.averageRating}
+          //averageRating={props.averageRating}
           />
         </CardContent>
       </Collapse>

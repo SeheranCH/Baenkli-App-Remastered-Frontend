@@ -24,21 +24,6 @@ const HomePage = () => {
       })
   }
 
-  // function addBenchToUserFavoriteList(benchId, dto) {
-  //   UserService.addBenchToFavorites(user.id, benchId, dto)
-  //     .then(res => {
-  //       const data = res.data;
-  //       setBenches(data);
-  //     })
-  //     .catch(err => {
-  //       console.error('Error in HomePage.js ', err);
-  //     })
-  // }
-
-  // const dto = (benchObj) => {
-  //   user: {...user, favoriteBenches: benchObj }
-  // }
-
   useEffect(() => {
     // Update the document title using the browser API
     getAllBenches();
