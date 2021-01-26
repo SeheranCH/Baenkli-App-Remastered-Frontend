@@ -10,6 +10,7 @@ import Rating from "../../atoms/rating/Rating";
 import Typography from '@material-ui/core/Typography';
 import SessionHandlerContext from '../../other/context/SessionHandlerContext';
 import CommentService from "../../../service/CommentService";
+import BenchService from "../../../service/BenchService";
 
 const useStyles = makeStyles((theme) => ({
     input: {
@@ -22,6 +23,9 @@ const CardPage = (props) => {
     const classes = useStyles();
 
     const { user } = useContext(SessionHandlerContext);
+
+    const [ownBenches, setOwnBenches] = useState([]);
+
 
     const postCardId = props.match.params.id;
     const [editing, setEditing] = useState(false);
@@ -59,6 +63,25 @@ const CardPage = (props) => {
                     setBench(res.data);
                 })
         }
+    }
+
+    function isBenchOwnBench(){
+        for(let ownbench of ownBenches){
+            if(ownbench.id === bench.id){
+                return true
+            }
+        }
+        return false;
+    }
+
+    const getOwnBenches = (id) => {
+        BenchService.getOwnBenches(id)
+            .then(res => {
+                setOwnBenches(res.data);
+            })
+            .catch(err => {
+                console.error('Error in AccountPage: ', err);
+            });
     }
 
     function deleteBench(id) {
@@ -105,6 +128,9 @@ const CardPage = (props) => {
         // Update the document title using the browser API
         getOneBench(postCardId);
         getComments(postCardId);
+        getOwnBenches(user.id);
+        isBenchOwnBench();
+
     }, []);
 
     const [valueRating, setValueRating] = useState({});
@@ -144,8 +170,8 @@ const CardPage = (props) => {
                         <PostCard
                             id={postCardId}
                             image={randomImg(500, 500, postCardId)}
-                            deleteButton={true}
-                            editButton={true}
+                            deleteButton={isBenchOwnBench() ? true : false}
+                            editButton={isBenchOwnBench() ? true : false}
                             title={bench.title}
                             averageQuiet={bench.quietness}
                             averageRating={calRating(bench.ratings)}

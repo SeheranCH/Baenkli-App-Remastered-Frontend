@@ -281,7 +281,7 @@ const AccountPage = () => {
 
     const classes = useStyles();
 
-    const { user } = useContext(SessionHandlerContext);
+    const { user, isActiveUserAdmin } = useContext(SessionHandlerContext);
 
     const [navigation, setNavigation] = useState("personalData");
 
@@ -344,7 +344,7 @@ const AccountPage = () => {
                     >
                         <BottomNavigationAction style={{ color: "#355A20" }} title={"My Personal Data"} label={"My Personal Data"} value="personalData" icon={<FaceIcon />} />
                         <BottomNavigationAction style={{ color: "#355A20" }} title={"My Personal Benches"} label={"My Personal Benches"} value="personalBenches" icon={<StoreIcon />} />
-                        <BottomNavigationAction style={{ color: "#355A20" }} title={"User Managment"} label={"User Managment"} value="userManagment" icon={<PeopleIcon />} />
+                        {isActiveUserAdmin() ?  <BottomNavigationAction style={{ color: "#355A20" }} title={"User Managment"} label={"User Managment"} value="userManagment" icon={<PeopleIcon />} /> : null }
 
                     </BottomNavigation>
                     <Paper
@@ -357,7 +357,8 @@ const AccountPage = () => {
                         {navigation === 'personalBenches' ?
                             <PersonalBenchManagment benches={ownBenches} benchHandler={setOwnBenches} />
                             : null}
-                        {navigation === 'userManagment' ?
+
+                        {isActiveUserAdmin() && navigation === 'userManagment' ?
                             <OwnTable
                                 data={users}
                                 headCells={headCells}

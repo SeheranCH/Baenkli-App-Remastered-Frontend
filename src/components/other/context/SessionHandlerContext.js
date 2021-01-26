@@ -49,6 +49,16 @@ export const SessionHandlerContextProvider = (props) => {
         setActiveUser(JSON.parse(localStorage.getItem('user')));
     };
 
+    const isActiveUserAdmin = () => {
+        if (user.roles[0]['name'] == 'USER'){
+            return false;
+        }
+        else if(user.roles[0]['name'] == 'ADMIN'){
+            return true;
+        }
+
+    };
+
     useEffect(() => {
         loadActiveUser();
         //eslint-disable-next-line
@@ -62,7 +72,8 @@ export const SessionHandlerContextProvider = (props) => {
                     setActiveUser,
                     login,
                     logout,
-                    loadActiveUser
+                    loadActiveUser,
+                    isActiveUserAdmin
                 }}
             >
                 {props.children}

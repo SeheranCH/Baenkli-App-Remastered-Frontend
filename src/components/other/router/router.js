@@ -8,6 +8,7 @@ import RegisterPage from "../../pages/registerPage/RegisterPage";
 import NewBenchPage from "../../pages/newBenchPage/NewBenchPage";
 import AccountPage from "../../pages/accountPage/AccountPage";
 import FavoritePage from "../../pages/favoritePage/FavoritePage";
+import SecureRoute from "../secureRouter/SecureRouter";
 
 const Router = () => {
   return (
@@ -15,11 +16,11 @@ const Router = () => {
       <Route exact path="/" component={HomePage} />
       <Route exact path="/login" component={LoginPage} />
       <Route exact path="/bench/:id" component={CardPage} />
-      <Route exact path="/maps" component={MapsPage} />
+      <SecureRoute exact path="/maps" component={MapsPage} />
       <Route exact path="/signup" component={RegisterPage}/>
-      <Route exact path="/create" component={NewBenchPage} />
-      <Route exact path="/account" component={AccountPage} />
-      <Route exact path="/favorites" component={FavoritePage} />
+      <SecureRoute  exact path="/create" component={NewBenchPage}/>
+      <SecureRoute exact path="/account" component={AccountPage} />
+      <SecureRoute exact path="/favorites" component={FavoritePage} />
     </Switch>
   );
 };
