@@ -4,11 +4,7 @@ import SessionHandlerContext from '../../other/context/SessionHandlerContext';
 import BenchService from "../../../service/BenchService";
 import Navbar from "../../molecules/navbar/Navbar"
 import BottomNavbar from "../../molecules/bottomNavbar/BottomNavbar"
-<<<<<<< HEAD
 import PostCard from "../../molecules/postCard/PostCard";
-=======
-import PostCard from "../../molecules/postCard/PostCard"
->>>>>>> feature_sabrina
 import Grid from '@material-ui/core/Grid';
 
 const FavoritePage = () => {

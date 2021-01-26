@@ -57,12 +57,14 @@ const PostCard = ({ bench, benchId, image, avatarTitle,
 
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(user.favoriteBenches.some(b => b.id === bench.id || b.id === benchId));
+  const [isFavorite, setIsFavorite] = useState(user.favoriteBenches !== undefined ? user.favoriteBenches.some(b => b.id === bench.id || b.id === benchId) : false);
 
-  console.log("das ish problem, ", isFavorite)
   const handleFavorite = (item) => {
     if (!isFavorite) {
-      let currentFavorites = user.favoriteBenches;
+      let currentFavorites = [];
+      if (user.favoriteBenches !== undefined) {
+         currentFavorites = user.favoriteBenches;
+      }
       currentFavorites.push(item);
       let userDto = { ...user, favoriteBenches: currentFavorites }
       addFavorite(item.id, userDto);
@@ -186,18 +188,6 @@ const PostCard = ({ bench, benchId, image, avatarTitle,
       <Collapse in={expanded} timeout="auto" unmountOnExit>
         <CardContent>
           <CardDivider
-<<<<<<< HEAD
-            amountBenches={props.amountBenches}
-            amountFirePlaces={props.amountFirePlaces}
-            amountTrashCans={props.amountTrashCans}
-            distanceToNextShop={props.distanceToNextShop}
-            directions={props.directions}
-            readOnly={props.readOnly}
-            averageQuiet={props.averageQuiet}
-            averageRating={props.averageRating}
-            hasMeadow={props.hasMeadow}
-            locationOnWater={props.locationOnWater}
-=======
             amountBenches={bench.amountBenches}
             amountFirePlaces={bench.amountFirePlaces}
             amountTrashCans={bench.amountTrashCans}
@@ -207,7 +197,6 @@ const PostCard = ({ bench, benchId, image, avatarTitle,
             averageQuiet={bench.averageQuiet}
             averageRating={calRating(bench.ratings)}
           //averageRating={props.averageRating}
->>>>>>> feature_sabrina
           />
         </CardContent>
       </Collapse>

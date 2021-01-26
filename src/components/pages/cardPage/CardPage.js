@@ -126,11 +126,6 @@ const CardPage = (props) => {
                             image={randomImg(500, 500, postCardId)}
                             deleteFunction={() => deleteBench(postCardId)}
                             editFunction={() => editBench(postCardId)}
-<<<<<<< HEAD:src/components/pages/cardPage/CardPage.js
-                            hasMeadow={bench.hasMeadow}
-                            locationOnWater={bench.locationOnWater}
-=======
->>>>>>> feature_sabrina:src/components/pages/cardPage/CardPage.js
                         />
                     </Grid>
                     <Grid item >
