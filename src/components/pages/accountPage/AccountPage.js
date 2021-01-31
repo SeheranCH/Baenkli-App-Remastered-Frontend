@@ -303,18 +303,19 @@ const AccountPage = () => {
             });
     }
 
-    function getFilterdUsers (data) {
-        return data.map(u => {
-            delete u.password;
+    function getFilterdUsers(data) {
+        let filteredUsers = data.map(u => {
+            delete u.favoriteBenches;
             return u;
         })
+        return filteredUsers;
     }
 
     const getAllUsers = () => {
         UserService.getAll()
             .then(res => {
                 let filteredUsers = getFilterdUsers(res.data);
-                setUsers(filteredUsers);
+                setUsers(res.data);
             })
             .catch(err => {
                 console.error('Error in AccountPage: ', err);

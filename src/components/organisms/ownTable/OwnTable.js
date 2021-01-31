@@ -121,8 +121,9 @@ const OwnTable = ({ data, headCells, userHandler }) => {
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                {headCells.map((headCell) => (
+                                {headCells.map((headCell, i) => (
                                     <TableCell
+                                        key={i}
                                         align={"inherit"}
                                         className={classes.cell}
                                         padding={"checkbox"}
@@ -139,14 +140,14 @@ const OwnTable = ({ data, headCells, userHandler }) => {
                             {filteredRows.map((row) => {
                                 return (
                                     <TableRow>
-                                        {Object.values(row).map((value) => {
+                                        {Object.values(row).map((value, i) => {
                                             if (value.length >= 30) {
                                                 return (
-                                                    <TableCell className={classes.headCell} title={value}>{value.substring(0, 12) + "..."}</TableCell>
+                                                    <TableCell key={i} className={classes.headCell} title={value}>{value.substring(0, 12) + "..."}</TableCell>
                                                 )
                                             } else {
                                                 return (
-                                                    <TableCell className={classes.headCell}>{value}</TableCell>
+                                                    <TableCell key={i} className={classes.headCell}>{value}</TableCell>
                                                 )
                                             }
 

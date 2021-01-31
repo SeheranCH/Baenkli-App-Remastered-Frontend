@@ -57,7 +57,6 @@ const CardPage = (props) => {
         CommentService.getByBenchId(id)
             .then((res) => {
                 setComments(res.data);
-                console.log(comments)
             })
             .catch((err) => {
                 console.log(err)
@@ -67,7 +66,6 @@ const CardPage = (props) => {
     function postComment(dto) {
         CommentService.create(dto)
             .then((res) => {
-                console.log(res.data)
                 getComments(postCardId);
             })
             .catch((err) => {

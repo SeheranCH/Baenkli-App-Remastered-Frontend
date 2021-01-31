@@ -21,6 +21,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import SessionHandlerContext from '../../other/context/SessionHandlerContext';
 import UserService from '../../../service/UserService';
+import { getAllBenches } from '../../pages/favoritePage/FavoritePage'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -51,18 +52,20 @@ const useStyles = makeStyles((theme) => ({
 
 
 const PostCard = ({ bench, benchId, image, avatarTitle,
-  editButton, editFunction, deleteButton, deleteFunction, ...props }) => {
+  editButton, editFunction, deleteButton, deleteFunction, modeFavorites, benchHandler, ...props }) => {
 
   const { user, setActiveUser } = useContext(SessionHandlerContext);
 
   const classes = useStyles();
   const [expanded, setExpanded] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(user.favoriteBenches.some(b => b.id === bench.id || b.id === benchId));
+  const [isFavorite, setIsFavorite] = useState(user.favoriteBenches ? user.favoriteBenches.some(b => b.id === bench.id || b.id === benchId) : false);
 
-  console.log("das ish problem, ", isFavorite)
   const handleFavorite = (item) => {
     if (!isFavorite) {
-      let currentFavorites = user.favoriteBenches;
+      let currentFavorites = [];
+      if (user.favoriteBenches) {
+        currentFavorites = user.favoriteBenches;
+      }
       currentFavorites.push(item);
       let userDto = { ...user, favoriteBenches: currentFavorites }
       addFavorite(item.id, userDto);
@@ -87,6 +90,9 @@ const PostCard = ({ bench, benchId, image, avatarTitle,
   function removeFavorite(benchId, dto) {
     UserService.removeBenchFromFavorites(user.id, benchId, dto)
       .then(res => {
+        if (modeFavorites) {
+          benchHandler(res.data.favoriteBenches)
+        }
         setActiveUser(res.data);
       })
       .catch(err => {
@@ -122,6 +128,12 @@ const PostCard = ({ bench, benchId, image, avatarTitle,
       return Math.round(result * 2) / 2;
     }
   }
+
+  // useEffect(() => {
+  //   // Update the document title using the browser API
+  //   getAllBenches();
+  //   // eslint-disable-next-line
+  // }, []);
 
   return (
     <Card className={classes.root}>

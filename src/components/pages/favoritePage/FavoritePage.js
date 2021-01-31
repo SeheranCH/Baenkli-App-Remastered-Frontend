@@ -46,6 +46,8 @@ const FavoritePage = () => {
               bench={obj}
               image={randomImg(500, 500, obj.id)}
               avatarTitle={obj.user !== null ? obj.user.username.substring(0, 2).toUpperCase() : null}
+              benchHandler={setBenches}
+              modeFavorites
             />
           </Grid>
         ))}

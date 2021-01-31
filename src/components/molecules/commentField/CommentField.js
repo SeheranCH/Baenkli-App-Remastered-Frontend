@@ -41,7 +41,6 @@ const CommentField = ({ username, firstName, lastName, bench, postComment }) => 
 
     const handleChange = (event) => {
         setValue(event.target.value);
-        console.log("value, ", value)
     };
 
     return (
